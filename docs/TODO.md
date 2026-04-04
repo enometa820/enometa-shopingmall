@@ -1,0 +1,111 @@
+# Enometa Shopping Mall — TODO
+
+> 최종 업데이트: 2026-04-05
+
+---
+
+## 완료된 항목
+
+### Day 1~2: 기초 + 풀스택 구현 + 배포
+- [x] 프로젝트 세팅 (Next.js 16 + TailwindCSS 4 + Supabase + TypeScript)
+- [x] 디자인 토큰 + Pretendard 폰트 설정
+- [x] DB 스키마 + RLS 정책 (products, orders, order_items, cart_items, inquiries)
+- [x] 공통 레이아웃 (Header, SideMenu, Footer, PageTransition, BackToTop)
+- [x] 인트로 페이지 (타이핑 애니메이션 + 이미지 카드 시퀀스)
+- [x] 상품 리스트 (카테고리 필터, 그리드 토글 2/3/4열, 호버 이미지 스왑)
+- [x] 상품 상세 (이미지 갤러리, 사이즈/컬러 선택, Sticky Bar)
+- [x] 장바구니 사이드 드로어 (수량 변경, 삭제, 합계)
+- [x] 결제 페이지 (배송 정보 폼 + 주문 요약)
+- [x] 주문 완료 페이지
+- [x] 회원가입 / 로그인 / 로그아웃
+- [x] 마이페이지 (주문 내역)
+- [x] 문의 시스템 (플로팅 버튼 + Supabase 저장)
+- [x] 관리자 (대시보드, 상품 CRUD, 주문 관리, 문의 관리)
+- [x] 미들웨어 (admin/mypage/checkout 라우트 보호)
+- [x] 개인정보처리방침 + 이용약관 페이지
+- [x] Seed 데이터 (12개 상품)
+- [x] Vercel 배포
+- [x] BMAD 전체 산출물 (브레인스토밍, Product Brief, PRD, Architecture, UX Design, Epics & Stories, Sprint Plan)
+- [x] 개발일지 작성
+
+### Day 3: 기능 완성 + 이미지
+- [x] BMAD Party Mode 이미지 전략 회의
+- [x] Midjourney 이미지 생성 (12상품 × 2장 + Lookbook 4장 = 28장)
+- [x] 이미지 적용 (인트로, 상품 리스트, 상세, Lookbook)
+- [x] 장바구니 Supabase 연동 (localStorage → DB 병합)
+- [x] 토스페이먼츠 테스트 모드 연동 (Widget SDK v1)
+- [x] Lookbook 페이지 (Coming Soon → 실제 구현)
+- [x] 상세 페이지 이미지 클릭 확대 모달
+- [x] SEO 메타태그 (Open Graph, Twitter Card, robots.txt)
+- [x] 전체 cursor: pointer 적용
+- [x] .env.example + .gitignore 정리
+- [x] 개발일지 Day 3 + 회고
+- [x] Git 커밋 + 푸시 + Vercel 자동 배포
+
+---
+
+## 남은 항목
+
+### 필수 (배포 품질)
+- [ ] Vercel 환경변수 추가 (NEXT_PUBLIC_TOSS_CLIENT_KEY, TOSS_SECRET_KEY)
+- [ ] 풀플로우 테스트 (회원가입 → 로그인 → 장바구니 병합 → 결제 → 주문 확인)
+- [ ] Lookbook 상품 링크 연결 (이미지 클릭 → 해당 상품 상세)
+
+### 권장 (완성도 향상)
+- [ ] 에디토리얼/매거진 페이지 (b컷 이미지 활용, 브랜드 스토리텔링)
+- [ ] 인트로 전용 이미지 5장 (현재 상품 메인 이미지 재활용 중)
+- [ ] 모바일 반응형 폴리싱 (상세 페이지 스와이프 갤러리, 간격 미세 조정)
+- [ ] 커스텀 404 페이지 (브랜드 디자인에 맞게)
+- [ ] Lighthouse 성능 점검 (80점+ 목표)
+
+### 선택 (확장)
+- [ ] 상품 검색 기능
+- [ ] 소셜 로그인 (카카오/네이버/구글)
+- [ ] Supabase Storage 이미지 업로드 (관리자 드래그앤드롭)
+- [ ] 관리자 폼 UX 개선 (JSON 입력 → 비주얼 UI)
+- [ ] 재고 검증 (stock과 비교)
+- [ ] middleware → proxy 마이그레이션 (Next.js 16 권장)
+- [ ] 주문 상세 페이지 (마이페이지에서 개별 주문 클릭)
+
+---
+
+## 기술 스택 요약
+
+| 영역 | 선택 |
+|------|------|
+| Framework | Next.js 16 (App Router) |
+| Language | TypeScript |
+| Styling | TailwindCSS 4 |
+| Animation | Framer Motion |
+| Backend | Supabase (PostgreSQL + Auth + RLS) |
+| Payment | 토스페이먼츠 (Widget SDK v1, 테스트 모드) |
+| State | Zustand + localStorage / Supabase |
+| Image | Midjourney v7 (AI 생성) |
+| Deploy | Vercel |
+| Docs | BMAD Framework |
+
+## 라우트 목록 (22개)
+
+```
+/                          인트로 (타이핑 + 카드 시퀀스)
+/shop                      상품 리스트
+/product/[id]              상품 상세
+/checkout                  결제
+/checkout/success          결제 성공 처리
+/checkout/fail             결제 실패
+/order-complete/[id]       주문 완료
+/lookbook                  Lookbook
+/auth/login                로그인
+/auth/signup               회원가입
+/mypage                    마이페이지
+/admin                     관리자 대시보드
+/admin/products            상품 관리
+/admin/products/new        상품 등록
+/admin/products/[id]/edit  상품 수정
+/admin/orders              주문 관리
+/admin/inquiries           문의 관리
+/policy/privacy            개인정보처리방침
+/policy/terms              이용약관
+/api/payments/confirm      결제 확인 API
+/api/update-images         이미지 일괄 업데이트 API
+```
