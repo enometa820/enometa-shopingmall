@@ -1,0 +1,85 @@
+@import "tailwindcss";
+
+/* ========================================
+   Enometa Design System
+   Reference: le17septembre.com
+   ======================================== */
+
+:root {
+  /* Colors */
+  --color-bg: #ffffff;
+  --color-bg-beige: #f9f7ef;
+  --color-text-body: #4a4a4a;
+  --color-text-sub: #999999;
+  --color-text-dark: #111111;
+  --color-text-muted: #ababab;
+  --color-border-light: #ececec;
+  --color-accent: #333333;
+
+  /* Spacing */
+  --header-height: 60px;
+  --section-gap-sm: 80px;
+  --section-gap-md: 100px;
+  --section-gap-lg: 130px;
+
+  /* Transitions */
+  --transition-fast: 0.2s ease;
+  --transition-base: 0.3s ease;
+  --transition-menu: 0.35s ease;
+  --transition-hover: 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+@theme inline {
+  --color-background: var(--color-bg);
+  --color-foreground: var(--color-text-body);
+  --color-beige: var(--color-bg-beige);
+  --color-body: var(--color-text-body);
+  --color-sub: var(--color-text-sub);
+  --color-dark: var(--color-text-dark);
+  --color-muted: var(--color-text-muted);
+  --color-border: var(--color-border-light);
+  --color-accent: var(--color-accent);
+  --font-sans: "Pretendard", "Noto Sans KR", sans-serif;
+}
+
+/* Base Styles */
+body {
+  background: var(--color-bg);
+  color: var(--color-text-body);
+  font-family: "Pretendard", "Noto Sans KR", sans-serif;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Typography — uppercase for all English text */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+/* Link hover — underline opacity transition (le17septembre pattern) */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Scrollbar — minimal */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-border-light);
+  border-radius: 2px;
+}
+
+/* Selection */
+::selection {
+  background: var(--color-text-dark);
+  color: white;
+}

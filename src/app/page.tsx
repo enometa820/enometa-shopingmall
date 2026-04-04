@@ -1,0 +1,137 @@
+'use client'
+
+import { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { useRouter } from 'next/navigation'
+import '@fontsource/montserrat/800.css'
+
+const LINES = [
+  { text: 'ENOMETA', delay: 0.3 },
+  { text: 'SHOPPING MALL', delay: 0.9 },
+  { text: 'PORTFOLIO', delay: 1.5 },
+]
+
+const CARD_IMAGES = [
+  '/images/intro-1.jpg',
+  '/images/intro-2.jpg',
+  '/images/intro-3.jpg',
+  '/images/intro-4.jpg',
+  '/images/intro-5.jpg',
+]
+
+export default function IntroPage() {
+  const router = useRouter()
+  const [entered, setEntered] = useState(false)
+
+  const handleEnter = () => {
+    setEntered(true)
+    setTimeout(() => router.push('/shop'), 800)
+  }
+
+  return (
+    <AnimatePresence>
+      {!entered && (
+        <motion.div
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.6, ease: 'easeInOut' }}
+          className="min-h-screen flex flex-col items-center justify-center bg-white px-6 overflow-hidden"
+        >
+          {/* Main Title — Mask Reveal */}
+          <div className="text-center mb-16">
+            {LINES.map((line, i) => (
+              <MaskRevealLine
+                key={i}
+                text={line.text}
+                delay={line.delay}
+                isFirst={i === 0}
+              />
+            ))}
+          </div>
+
+          {/* Divider Line */}
+          <motion.div
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: 1 }}
+            transition={{ delay: 2.1, duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
+            className="w-[60px] h-[1px] bg-body/30 origin-center mb-12"
+          />
+
+          {/* Image Cards — Stagger Fade Up */}
+          <div className="flex gap-3 md:gap-5 mb-14 flex-wrap justify-center max-w-[720px]">
+            {CARD_IMAGES.map((src, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 40 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  delay: 2.4 + i * 0.12,
+                  duration: 0.7,
+                  ease: [0.25, 0.1, 0.25, 1],
+                }}
+                className="group w-[100px] h-[140px] md:w-[120px] md:h-[168px] overflow-hidden cursor-pointer"
+              >
+                <div className="w-full h-full bg-gradient-to-br from-neutral-200 to-neutral-300 group-hover:scale-[1.03] transition-transform duration-500" />
+                {/* TODO: 실제 이미지로 교체 */}
+                {/* <img src={src} alt="" className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500" /> */}
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Enter Button — Fade In */}
+          <motion.button
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 3.2, duration: 0.6 }}
+            onClick={handleEnter}
+            className="relative text-[11px] tracking-[3px] uppercase text-body/70 hover:text-body transition-colors duration-500 pb-[2px]"
+          >
+            ENTER SHOP
+            <span className="absolute bottom-0 left-0 right-0 h-[0.5px] bg-current" />
+          </motion.button>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  )
+}
+
+/* ─── Mask Reveal Line ─── */
+
+function MaskRevealLine({
+  text,
+  delay,
+  isFirst,
+}: {
+  text: string
+  delay: number
+  isFirst: boolean
+}) {
+  return (
+    <div className="overflow-hidden">
+      <motion.div
+        initial={{ y: '100%' }}
+        animate={{ y: '0%' }}
+        transition={{
+          delay,
+          duration: 0.8,
+          ease: [0.25, 0.1, 0.25, 1],
+        }}
+      >
+        <h1
+          className={`
+            uppercase tracking-[0.15em] text-dark leading-[1.1]
+            ${isFirst
+              ? 'text-[48px] md:text-[72px] lg:text-[88px] tracking-[0.12em]'
+              : 'text-[14px] md:text-[16px] tracking-[0.3em] text-body/60 mt-2'
+            }
+          `}
+          style={{
+            fontFamily: isFirst ? '"Montserrat", sans-serif' : '"Pretendard", sans-serif',
+            fontWeight: isFirst ? 800 : 300,
+          }}
+        >
+          {text}
+        </h1>
+      </motion.div>
+    </div>
+  )
+}
