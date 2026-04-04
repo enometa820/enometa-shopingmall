@@ -1,15 +1,26 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useCartStore } from '@/store/cart-store'
+import { createClient } from '@/lib/supabase/client'
 import SideMenu from './SideMenu'
 import CartDrawer from '../cart/CartDrawer'
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [cartOpen, setCartOpen] = useState(false)
+  const [user, setUser] = useState<any>(null)
   const itemCount = useCartStore((s) => s.getItemCount())
+
+  useEffect(() => {
+    const supabase = createClient()
+    supabase.auth.getUser().then(({ data }) => setUser(data.user))
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null)
+    })
+    return () => subscription.unsubscribe()
+  }, [])
 
   return (
     <>
@@ -35,8 +46,14 @@ export default function Header() {
             </Link>
           </div>
 
-          {/* Right — CART */}
-          <div className="flex justify-end items-center">
+          {/* Right — LOG IN + CART */}
+          <div className="flex justify-end items-center gap-5 md:gap-6">
+            <Link
+              href={user ? '/mypage' : '/auth/login'}
+              className="text-xs tracking-[1.25px] uppercase font-normal text-body hover:opacity-60 transition-opacity duration-300 hidden md:block"
+            >
+              {user ? 'MY PAGE' : 'LOG IN'}
+            </Link>
             <button
               onClick={() => setCartOpen(true)}
               className="text-xs tracking-[1.25px] uppercase font-normal text-body hover:opacity-60 transition-opacity duration-300"

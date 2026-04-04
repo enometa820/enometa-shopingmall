@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
+import Link from 'next/link'
 import CategoryFilter from '@/components/shop/CategoryFilter'
 import GridToggle from '@/components/shop/GridToggle'
 import ProductGrid from '@/components/shop/ProductGrid'
@@ -47,7 +48,15 @@ export default function ShopContent({ initialProducts }: Props) {
     <>
       {/* Filter + Grid Toggle */}
       <div className="flex items-center justify-between mb-10 md:mb-14">
-        <CategoryFilter active={category} onChange={setCategory} />
+        <div className="flex items-center gap-6 md:gap-8">
+          <CategoryFilter active={category} onChange={setCategory} />
+          <Link
+            href="/lookbook"
+            className="text-xs tracking-[1.25px] uppercase text-sub hover:text-body pb-1 transition-all duration-300"
+          >
+            LOOKBOOK
+          </Link>
+        </div>
         <GridToggle active={gridCols} onChange={handleGridChange} />
       </div>
 
