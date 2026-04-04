@@ -10,10 +10,9 @@ export default async function AdminDashboard() {
   const today = new Date()
   today.setHours(0, 0, 0, 0)
 
-  const [ordersRes, productsRes, usersRes, inquiriesRes, recentOrdersRes] = await Promise.all([
+  const [ordersRes, productsRes, inquiriesRes, recentOrdersRes] = await Promise.all([
     supabase.from('orders').select('total, created_at'),
     supabase.from('products').select('id', { count: 'exact', head: true }),
-    supabase.from('inquiries').select('id', { count: 'exact', head: true }),  // placeholder for user count
     supabase.from('inquiries').select('id', { count: 'exact', head: true }),
     supabase.from('orders').select('*, order_items(product_name)').order('created_at', { ascending: false }).limit(5),
   ])

@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { createInquiry } from '@/actions/inquiries'
 
 export default function FloatingInquiry() {
   const [isOpen, setIsOpen] = useState(false)
@@ -12,8 +13,8 @@ export default function FloatingInquiry() {
     const form = e.currentTarget
     const formData = new FormData(form)
 
-    // TODO: Supabase에 저장하는 Server Action 연결
-    console.log('Inquiry submitted:', Object.fromEntries(formData))
+    const result = await createInquiry(formData)
+    if (result.error) return
 
     setSubmitted(true)
     setTimeout(() => {

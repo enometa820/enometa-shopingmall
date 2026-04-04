@@ -91,6 +91,7 @@ export default function CheckoutPage() {
           />
           <input
             name="phone"
+            type="tel"
             value={form.phone}
             onChange={handleChange}
             placeholder="전화번호"
@@ -128,7 +129,7 @@ export default function CheckoutPage() {
               disabled={loading}
               className="w-full py-3.5 bg-dark text-white text-xs uppercase tracking-[1.5px] hover:bg-accent transition-colors duration-300 disabled:opacity-50"
             >
-              {loading ? '처리 중...' : `${formatPrice(total)} 결제하기`}
+              {loading ? '처리 중...' : `${formatPrice(total)} 주문하기 (데모)`}
             </button>
           </div>
         </form>
