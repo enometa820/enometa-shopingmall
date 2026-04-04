@@ -43,6 +43,10 @@
 }
 
 /* Base Styles */
+button, a, [role="button"] {
+  cursor: pointer;
+}
+
 body {
   background: var(--color-bg);
   color: var(--color-text-body);

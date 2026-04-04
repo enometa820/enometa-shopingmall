@@ -12,11 +12,11 @@ const LINES = [
 ]
 
 const CARD_IMAGES = [
-  '/images/intro-1.jpg',
-  '/images/intro-2.jpg',
-  '/images/intro-3.jpg',
-  '/images/intro-4.jpg',
-  '/images/intro-5.jpg',
+  { src: '/images/products/01_main.png', color: 'from-stone-200 to-stone-300' },
+  { src: '/images/products/04_main.png', color: 'from-neutral-300 to-neutral-400' },
+  { src: '/images/products/06_main.png', color: 'from-stone-300 to-stone-400' },
+  { src: '/images/products/03_main.png', color: 'from-zinc-200 to-zinc-300' },
+  { src: '/images/products/05_main.png', color: 'from-neutral-200 to-neutral-300' },
 ]
 
 export default function IntroPage() {
@@ -58,7 +58,7 @@ export default function IntroPage() {
 
           {/* Image Cards — Stagger Fade Up */}
           <div className="flex gap-3 md:gap-5 mb-14 flex-wrap justify-center max-w-[720px]">
-            {CARD_IMAGES.map((src, i) => (
+            {CARD_IMAGES.map((card, i) => (
               <motion.div
                 key={i}
                 initial={{ opacity: 0, y: 40 }}
@@ -68,11 +68,15 @@ export default function IntroPage() {
                   duration: 0.7,
                   ease: [0.25, 0.1, 0.25, 1],
                 }}
-                className="group w-[100px] h-[140px] md:w-[120px] md:h-[168px] overflow-hidden cursor-pointer"
+                className="group w-[100px] h-[140px] md:w-[120px] md:h-[168px] overflow-hidden cursor-pointer relative"
               >
-                <div className="w-full h-full bg-gradient-to-br from-neutral-200 to-neutral-300 group-hover:scale-[1.03] transition-transform duration-500" />
-                {/* TODO: 실제 이미지로 교체 */}
-                {/* <img src={src} alt="" className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500" /> */}
+                <div className={`absolute inset-0 bg-gradient-to-br ${card.color} group-hover:scale-[1.03] transition-transform duration-500`} />
+                <img
+                  src={card.src}
+                  alt={`Enometa collection ${i + 1}`}
+                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500"
+                  onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
+                />
               </motion.div>
             ))}
           </div>

@@ -12,12 +12,19 @@ export default function Header() {
   const [cartOpen, setCartOpen] = useState(false)
   const [user, setUser] = useState<any>(null)
   const itemCount = useCartStore((s) => s.getItemCount())
+  const onCartLogin = useCartStore((s) => s.onLogin)
+  const onCartLogout = useCartStore((s) => s.onLogout)
 
   useEffect(() => {
     const supabase = createClient()
-    supabase.auth.getUser().then(({ data }) => setUser(data.user))
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    supabase.auth.getUser().then(({ data }) => {
+      setUser(data.user)
+      if (data.user) onCartLogin()
+    })
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       setUser(session?.user ?? null)
+      if (event === 'SIGNED_IN') onCartLogin()
+      if (event === 'SIGNED_OUT') onCartLogout()
     })
     return () => subscription.unsubscribe()
   }, [])
