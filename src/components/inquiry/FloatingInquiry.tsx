@@ -29,7 +29,7 @@ export default function FloatingInquiry() {
       {/* Floating Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-8 right-20 z-40 w-14 h-14 rounded-full bg-dark text-white flex items-center justify-center text-2xl font-light hover:bg-accent transition-all duration-300 shadow-[0_4px_20px_rgba(0,0,0,0.25)]"
+        className="fixed bottom-6 right-5 md:bottom-8 md:right-8 z-40 w-12 h-12 md:w-14 md:h-14 rounded-full bg-dark text-white flex items-center justify-center text-xl md:text-2xl font-light hover:bg-accent transition-all duration-300 shadow-[0_4px_20px_rgba(0,0,0,0.25)]"
         aria-label="문의하기"
       >
         ?
