@@ -37,7 +37,7 @@ export default function IntroPage() {
           className="min-h-screen flex flex-col items-center justify-center bg-white px-6 overflow-hidden"
         >
           {/* Main Title — Mask Reveal */}
-          <div className="text-center mb-16">
+          <div className="text-center mb-16 select-none cursor-default">
             {LINES.map((line, i) => (
               <MaskRevealLine
                 key={i}
