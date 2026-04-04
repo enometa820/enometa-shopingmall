@@ -17,29 +17,29 @@ const lookbookData = {
     {
       src: '/images/lookbook/codi_01.png',
       alt: 'Wrinkle Knit Top Styling',
-      productSlug: '',
+      productSlug: '4ac0d970-f3ea-469b-83c9-d2d138d46aa4',
     },
     {
       src: '/images/lookbook/codi_02.png',
       alt: 'Satin Easy Pants Styling',
-      productSlug: '',
+      productSlug: '282e20fd-6ea0-430b-983d-06ce230db5cf',
     },
   ],
   grid3: [
     {
       src: '/images/products/05_main.png',
       alt: 'Trench Coat Look',
-      productSlug: '',
+      productSlug: 'a031da83-03ed-4529-948f-2c614b8e19b3',
     },
     {
       src: '/images/products/07_main.png',
       alt: 'Midi Skirt Look',
-      productSlug: '',
+      productSlug: 'af814bd7-8285-45b1-8e07-ddf9154cfb06',
     },
     {
       src: '/images/products/08_main.png',
       alt: 'Wide Trousers Look',
-      productSlug: '',
+      productSlug: '9222ecc5-1043-4cdd-830c-a79bc7030615',
     },
   ],
 }

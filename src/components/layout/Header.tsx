@@ -11,9 +11,12 @@ export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [cartOpen, setCartOpen] = useState(false)
   const [user, setUser] = useState<any>(null)
+  const [mounted, setMounted] = useState(false)
   const itemCount = useCartStore((s) => s.getItemCount())
   const onCartLogin = useCartStore((s) => s.onLogin)
   const onCartLogout = useCartStore((s) => s.onLogout)
+
+  useEffect(() => setMounted(true), [])
 
   useEffect(() => {
     const supabase = createClient()
@@ -65,7 +68,7 @@ export default function Header() {
               onClick={() => setCartOpen(true)}
               className="text-xs tracking-[1.25px] uppercase font-normal text-body hover:opacity-60 transition-opacity duration-300"
             >
-              CART({itemCount})
+              CART({mounted ? itemCount : 0})
             </button>
           </div>
         </div>
