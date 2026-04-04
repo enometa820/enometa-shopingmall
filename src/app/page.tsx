@@ -57,7 +57,7 @@ export default function IntroPage() {
           />
 
           {/* Image Cards — Stagger Fade Up */}
-          <div className="flex gap-3 md:gap-5 mb-14 flex-wrap justify-center max-w-[720px]">
+          <div className="flex gap-3 md:gap-5 mb-14 flex-wrap justify-center max-w-[720px] [&_*]:!cursor-default">
             {CARD_IMAGES.map((card, i) => (
               <motion.div
                 key={i}
@@ -68,13 +68,15 @@ export default function IntroPage() {
                   duration: 0.7,
                   ease: [0.25, 0.1, 0.25, 1],
                 }}
-                className="group w-[100px] h-[140px] md:w-[120px] md:h-[168px] overflow-hidden cursor-pointer relative"
+                className="group w-[100px] h-[140px] md:w-[120px] md:h-[168px] overflow-hidden relative"
+                style={{ cursor: 'default' }}
               >
-                <div className={`absolute inset-0 bg-gradient-to-br ${card.color} group-hover:scale-[1.03] transition-transform duration-500`} />
+                <div className={`absolute inset-0 bg-gradient-to-br ${card.color} group-hover:scale-[1.03] transition-transform duration-500`} style={{ cursor: 'default' }} />
                 <img
                   src={card.src}
                   alt={`Enometa collection ${i + 1}`}
                   className="absolute inset-0 w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500"
+                  style={{ cursor: 'default' }}
                   onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
                 />
               </motion.div>
