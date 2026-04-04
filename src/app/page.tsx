@@ -57,7 +57,7 @@ export default function IntroPage() {
           />
 
           {/* Image Cards — Stagger Fade Up */}
-          <div className="flex gap-3 md:gap-5 mb-14 flex-wrap justify-center max-w-[720px] [&_*]:!cursor-default">
+          <div className="flex gap-2 md:gap-5 mb-14 justify-center [&_*]:!cursor-default">
             {CARD_IMAGES.map((card, i) => (
               <motion.div
                 key={i}
