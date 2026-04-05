@@ -1,6 +1,6 @@
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
-import BackToTop from '@/components/ui/BackToTop'
+// import BackToTop from '@/components/ui/BackToTop'
 import FloatingInquiry from '@/components/inquiry/FloatingInquiry'
 import PageTransition from '@/components/layout/PageTransition'
 
@@ -17,7 +17,7 @@ export default function ShopLayout({
       </main>
       <Footer />
       <FloatingInquiry />
-      <BackToTop />
+      {/* <BackToTop /> */}
     </>
   )
 }
