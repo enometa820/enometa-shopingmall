@@ -46,9 +46,19 @@ export default function ShopContent({ initialProducts }: Props) {
 
   return (
     <>
-      {/* Filter + Grid Toggle */}
-      <div className="flex items-center justify-between mb-10 md:mb-14">
-        <div className="flex items-center gap-6 md:gap-8">
+      {/* Mobile — LOOKBOOK 중앙 */}
+      <div className="md:hidden flex justify-center mb-8">
+        <Link
+          href="/lookbook"
+          className="text-xs tracking-[1.25px] uppercase text-body border-b border-body pb-1 transition-all duration-300"
+        >
+          LOOKBOOK
+        </Link>
+      </div>
+
+      {/* Desktop — Filter + Grid Toggle */}
+      <div className="hidden md:flex items-center justify-between mb-14">
+        <div className="flex items-center gap-8">
           <CategoryFilter active={category} onChange={setCategory} />
           <Link
             href="/lookbook"
