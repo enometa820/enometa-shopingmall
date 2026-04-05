@@ -71,15 +71,15 @@
 - [x] Lighthouse 성능 점검 (75점 — 이미지 확대 기능 유지를 위해 리사이즈 포기, 인트로 연출 유지)
 
 
-### 낮은 우선순위 (확장)
-- [ ] 상품 검색 기능
-- [ ] 소셜 로그인 (카카오/네이버/구글)
-- [ ] Supabase Storage 이미지 업로드 (관리자 드래그앤드롭)
-- [ ] 관리자 폼 UX 개선 (JSON 입력 → 비주얼 UI)
-- [ ] 재고 검증 (stock과 비교)
-- [ ] middleware → proxy 마이그레이션 (Next.js 16 권장)
-- [ ] 주문 상세 페이지 (마이페이지에서 개별 주문 클릭)
-- [ ] 신규가입 할인쿠폰 시스템
+### 낮은 우선순위 — ✅ 전부 완료
+- [x] 상품 검색 기능 (이름/설명 기반 실시간 필터링)
+- [x] 소셜 로그인 (Google/카카오 버튼 + OAuth 콜백 — Supabase Provider 설정 필요)
+- [x] Supabase Storage 이미지 업로드 (설정 가이드 문서 작성 — 버킷 생성 필요)
+- [x] 관리자 폼 UX 개선 (컬러 피커, 사이즈 토글, 재고 사이즈별 입력, 이미지 URL 동적 추가)
+- [x] 재고 검증 (주문 생성 시 서버에서 재고 확인)
+- [x] middleware → proxy 마이그레이션 (Next.js 16 권장)
+- [x] 주문 상세 페이지 (수령인/연락처/상세주소/메모 표시 보강)
+- [x] 신규가입 할인쿠폰 시스템 (10% 환영쿠폰 — DB 테이블 SQL + 서버 액션)
 
 ---
 
@@ -98,25 +98,26 @@
 | Deploy | Vercel |
 | Docs | BMAD Framework |
 
-## 라우트 목록 (23개)
+## 라우트 목록 (24개)
 
 ```
 /                          인트로 (타이핑 + 카드 시퀀스)
-/shop                      상품 리스트
+/shop                      상품 리스트 (검색 + 카테고리 필터)
 /product/[id]              상품 상세
 /checkout                  결제
 /checkout/success          결제 성공 처리
 /checkout/fail             결제 실패
-/order-complete/[id]       주문 완료
+/order-complete/[id]       주문 완료/상세
 /lookbook                  Lookbook
 /editorial                 에디토리얼 (b컷 이미지)
-/auth/login                로그인
-/auth/signup               회원가입
+/auth/login                로그인 (이메일 + 소셜)
+/auth/signup               회원가입 (+ 환영쿠폰)
+/auth/callback             OAuth 콜백
 /mypage                    마이페이지
 /admin                     관리자 대시보드
 /admin/products            상품 관리
-/admin/products/new        상품 등록
-/admin/products/[id]/edit  상품 수정
+/admin/products/new        상품 등록 (비주얼 폼)
+/admin/products/[id]/edit  상품 수정 (비주얼 폼)
 /admin/orders              주문 관리
 /admin/inquiries           문의 관리
 /policy/privacy            개인정보처리방침

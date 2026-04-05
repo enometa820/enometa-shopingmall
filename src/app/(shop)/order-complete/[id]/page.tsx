@@ -39,7 +39,14 @@ export default async function OrderCompletePage({ params }: Props) {
         <InfoRow label="주문일" value={formatDate(order.created_at)} />
         <InfoRow label="상태" value={ORDER_STATUS_LABELS[order.status as OrderStatus]} />
         <InfoRow label="결제 금액" value={formatPrice(order.total)} />
-        <InfoRow label="배송지" value={`${order.shipping_name} / ${order.shipping_address}`} />
+        <InfoRow label="수령인" value={`${order.shipping_name} (${order.shipping_phone})`} />
+        <InfoRow label="배송지" value={order.shipping_address} />
+        {order.shipping_detail && (
+          <InfoRow label="상세주소" value={order.shipping_detail} />
+        )}
+        {order.shipping_memo && (
+          <InfoRow label="배송메모" value={order.shipping_memo} />
+        )}
       </div>
 
       {/* Items */}

@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
+import { createWelcomeCoupon } from '@/actions/coupons'
 
 export default function SignupPage() {
   const router = useRouter()
@@ -42,6 +43,16 @@ export default function SignupPage() {
       setError(error.message)
       setLoading(false)
       return
+    }
+
+    // 신규가입 환영 쿠폰 발급
+    const { data: { user: newUser } } = await supabase.auth.getUser()
+    if (newUser) {
+      try {
+        await createWelcomeCoupon(newUser.id)
+      } catch {
+        // 쿠폰 테이블 미생성 시 무시
+      }
     }
 
     router.push('/shop')

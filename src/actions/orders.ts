@@ -23,6 +23,24 @@ export async function createOrder(input: CreateOrderInput) {
     return { error: '로그인이 필요합니다.' }
   }
 
+  // 재고 검증
+  const productIds = [...new Set(input.items.map((i) => i.product_id))]
+  const { data: products } = await supabase
+    .from('products')
+    .select('id, stock')
+    .in('id', productIds)
+
+  if (products) {
+    for (const item of input.items) {
+      const product = products.find((p) => p.id === item.product_id)
+      const stock = (product?.stock as Record<string, number>) || {}
+      const available = stock[item.size] ?? 0
+      if (available < item.quantity) {
+        return { error: `${item.product_name} (${item.size}) 재고가 부족합니다. (남은 수량: ${available}개)` }
+      }
+    }
+  }
+
   const orderNumber = formatOrderNumber()
 
   // 주문 생성

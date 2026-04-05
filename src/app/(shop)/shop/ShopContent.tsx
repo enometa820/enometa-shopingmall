@@ -18,6 +18,7 @@ export default function ShopContent({ initialProducts }: Props) {
 
   const [category, setCategory] = useState<ProductCategory | 'all'>(categoryParam || 'all')
   const [gridCols, setGridCols] = useState<2 | 3 | 4>(3)
+  const [search, setSearch] = useState('')
 
   // localStorage에서 그리드 설정 복원
   useEffect(() => {
@@ -40,12 +41,35 @@ export default function ShopContent({ initialProducts }: Props) {
   }
 
   const filtered = useMemo(() => {
-    if (category === 'all') return initialProducts
-    return initialProducts.filter((p) => p.category === category)
-  }, [initialProducts, category])
+    let result = initialProducts
+    if (category !== 'all') {
+      result = result.filter((p) => p.category === category)
+    }
+    if (search.trim()) {
+      const q = search.trim().toLowerCase()
+      result = result.filter(
+        (p) =>
+          p.name.toLowerCase().includes(q) ||
+          p.name_display.toLowerCase().includes(q) ||
+          p.description?.toLowerCase().includes(q)
+      )
+    }
+    return result
+  }, [initialProducts, category, search])
 
   return (
     <>
+      {/* Search Bar */}
+      <div className="mb-8 md:mb-10">
+        <input
+          type="text"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search products..."
+          className="w-full border-b border-border bg-transparent py-2 text-xs tracking-wide text-body placeholder:text-muted focus:border-dark focus:outline-none transition-colors duration-300"
+        />
+      </div>
+
       {/* Desktop — Filter + Grid Toggle */}
       <div className="hidden md:flex items-center justify-between mb-14">
         <div className="flex items-center gap-8">
