@@ -25,7 +25,7 @@ const lookbookData = {
       productSlug: '282e20fd-6ea0-430b-983d-06ce230db5cf',
     },
   ],
-  grid3: [
+  grid4: [
     {
       src: '/images/products/05_main.png',
       alt: 'Trench Coat Look',
@@ -40,6 +40,11 @@ const lookbookData = {
       src: '/images/products/08_main.png',
       alt: 'Wide Trousers Look',
       productSlug: '9222ecc5-1043-4cdd-830c-a79bc7030615',
+    },
+    {
+      src: '/images/products/04_main.png',
+      alt: 'Wool Coat Look',
+      productSlug: 'c1df7b17-1c49-4027-8cf4-29b673944746',
     },
   ],
 }
@@ -131,10 +136,10 @@ export default function LookbookPage() {
       {/* Spacing */}
       <div className="h-16 md:h-24" />
 
-      {/* 3 Column Grid */}
+      {/* 4 Column Grid */}
       <FadeInSection className="px-5 md:px-10">
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
-          {lookbookData.grid3.map((item, i) => (
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+          {lookbookData.grid4.map((item, i) => (
             <div key={i} className="aspect-[2/3]">
               {item.productSlug ? (
                 <Link href={`/product/${item.productSlug}`}>
