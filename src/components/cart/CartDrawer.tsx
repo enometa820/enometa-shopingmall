@@ -173,7 +173,7 @@ export default function CartDrawer({ isOpen, onClose }: Props) {
                 </Link>
                 <button
                   onClick={onClose}
-                  className="block w-full text-center py-2 text-xs text-sub hover:text-body uppercase tracking-wide transition-colors duration-300"
+                  className="block w-full text-center py-2 text-[13px] text-sub hover:text-body uppercase tracking-[2px] transition-colors duration-300 font-medium"
                 >
                   쇼핑 계속하기
                 </button>
