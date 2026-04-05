@@ -166,7 +166,7 @@ export default function CartDrawer({ isOpen, onClose }: Props) {
                 <Link
                   href="/checkout"
                   onClick={onClose}
-                  className="block w-full text-center py-3 bg-dark text-white text-xs uppercase tracking-[1.25px] hover:bg-accent transition-colors duration-300"
+                  className="block w-full text-center py-3.5 bg-dark text-white text-sm uppercase tracking-[1.25px] hover:bg-accent transition-colors duration-300 font-normal"
                 >
                   결제하기
                 </Link>
