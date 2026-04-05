@@ -34,7 +34,7 @@ export default function Header() {
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 z-50 bg-white" style={{ height: 'var(--header-height)' }}>
+      <header className="fixed top-8 left-0 right-0 z-50 bg-white" style={{ height: 'var(--header-height)' }}>
         <div className="grid grid-cols-3 items-center h-full px-5">
           {/* Left — MENU */}
           <div className="flex items-center">
