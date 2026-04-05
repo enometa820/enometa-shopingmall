@@ -46,16 +46,6 @@ export default function ShopContent({ initialProducts }: Props) {
 
   return (
     <>
-      {/* Mobile — LOOKBOOK 중앙 */}
-      <div className="md:hidden flex justify-center mb-8">
-        <Link
-          href="/lookbook"
-          className="text-xs tracking-[1.25px] uppercase text-body border-b border-body pb-1 transition-all duration-300"
-        >
-          LOOKBOOK
-        </Link>
-      </div>
-
       {/* Desktop — Filter + Grid Toggle */}
       <div className="hidden md:flex items-center justify-between mb-14">
         <div className="flex items-center gap-8">
