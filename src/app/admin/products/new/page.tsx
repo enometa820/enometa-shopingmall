@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { adminCreateProduct } from '@/actions/admin'
+import ImageUploader from '@/components/admin/ImageUploader'
 
 const CATEGORIES = ['top', 'outer', 'bottom', 'shoes', 'acc']
 const DEFAULT_SIZES = ['S', 'M', 'L', 'XL']
@@ -163,31 +164,8 @@ export default function AdminNewProductPage() {
           </div>
         </div>
 
-        {/* 이미지 URL — 동적 추가 */}
-        <div>
-          <label className="text-[10px] uppercase tracking-[1.5px] text-sub block mb-2">이미지 URL</label>
-          <div className="space-y-2">
-            {images.map((url, i) => (
-              <div key={i} className="flex items-center gap-2">
-                <input
-                  type="text"
-                  value={url}
-                  onChange={(e) => {
-                    const next = [...images]
-                    next[i] = e.target.value
-                    setImages(next)
-                  }}
-                  placeholder="https://... 또는 /images/products/01_main.png"
-                  className="flex-1 text-xs py-2 px-3 border border-border outline-none focus:border-dark"
-                />
-                {images.length > 1 && (
-                  <button type="button" onClick={() => setImages(images.filter((_, j) => j !== i))} className="text-sub hover:text-body text-sm">✕</button>
-                )}
-              </div>
-            ))}
-          </div>
-          <button type="button" onClick={() => setImages([...images, ''])} className="text-[10px] text-sub mt-2 hover:text-body">+ 이미지 추가</button>
-        </div>
+        {/* 이미지 업로드 */}
+        <ImageUploader images={images} onChange={setImages} />
 
         <Field label="호버 이미지 URL" name="hover_image" placeholder="/images/products/01_hover.png" />
 
