@@ -116,10 +116,17 @@ export const useCartStore = create<CartStore>()(
 
       // 로그인 시: localStorage 카트 → Supabase 병합 → Supabase에서 다시 불러오기
       onLogin: async () => {
+        // 이미 로그인 처리됐으면 중복 실행 방지
+        if (get().isLoggedIn) {
+          const serverItems = await getCartItems()
+          set({ items: serverItems })
+          return
+        }
+
         set({ isLoading: true })
         const localItems = get().items
 
-        // 로컬 카트가 있으면 Supabase에 병합
+        // 로컬 카트가 있으면 Supabase에 병합 (최초 1회만)
         if (localItems.length > 0) {
           await syncCartToSupabase(localItems)
         }
