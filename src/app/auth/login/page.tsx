@@ -23,16 +23,6 @@ function LoginForm() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
-  const handleSocialLogin = async (provider: 'google' | 'kakao') => {
-    const supabase = createClient()
-    await supabase.auth.signInWithOAuth({
-      provider,
-      options: {
-        redirectTo: `${window.location.origin}/auth/callback?redirect=${redirect}`,
-      },
-    })
-  }
-
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
@@ -88,29 +78,6 @@ function LoginForm() {
             {loading ? '로그인 중...' : 'LOG IN'}
           </button>
         </form>
-
-        {/* Divider */}
-        <div className="flex items-center gap-3 my-8">
-          <div className="flex-1 border-t border-border" />
-          <span className="text-[10px] text-muted uppercase tracking-wide">or</span>
-          <div className="flex-1 border-t border-border" />
-        </div>
-
-        {/* Social Login */}
-        <div className="space-y-3">
-          <button
-            onClick={() => handleSocialLogin('google')}
-            className="w-full py-3 border border-border text-xs uppercase tracking-[1.5px] text-body hover:border-dark transition-colors duration-300"
-          >
-            Google로 로그인
-          </button>
-          <button
-            onClick={() => handleSocialLogin('kakao')}
-            className="w-full py-3 border border-border text-xs uppercase tracking-[1.5px] text-body hover:border-dark transition-colors duration-300"
-          >
-            카카오로 로그인
-          </button>
-        </div>
 
         <div className="mt-8 text-center">
           <Link

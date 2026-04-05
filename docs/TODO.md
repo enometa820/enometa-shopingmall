@@ -73,7 +73,6 @@
 
 ### 낮은 우선순위 — ✅ 전부 완료
 - [x] 상품 검색 기능 (이름/설명 기반 실시간 필터링)
-- [x] 소셜 로그인 (Google/카카오 버튼 + OAuth 콜백 — Supabase Provider 설정 필요)
 - [x] Supabase Storage 이미지 업로드 (설정 가이드 문서 작성 — 버킷 생성 필요)
 - [x] 관리자 폼 UX 개선 (컬러 피커, 사이즈 토글, 재고 사이즈별 입력, 이미지 URL 동적 추가)
 - [x] 재고 검증 (주문 생성 시 서버에서 재고 확인)
@@ -98,7 +97,7 @@
 | Deploy | Vercel |
 | Docs | BMAD Framework |
 
-## 라우트 목록 (24개)
+## 라우트 목록 (23개)
 
 ```
 /                          인트로 (타이핑 + 카드 시퀀스)
@@ -110,9 +109,8 @@
 /order-complete/[id]       주문 완료/상세
 /lookbook                  Lookbook
 /editorial                 에디토리얼 (b컷 이미지)
-/auth/login                로그인 (이메일 + 소셜)
+/auth/login                로그인
 /auth/signup               회원가입 (+ 환영쿠폰)
-/auth/callback             OAuth 콜백
 /mypage                    마이페이지
 /admin                     관리자 대시보드
 /admin/products            상품 관리
