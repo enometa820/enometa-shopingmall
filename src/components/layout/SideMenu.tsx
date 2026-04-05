@@ -1,8 +1,10 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
+import { createClient } from '@/lib/supabase/client'
 
 const CATEGORIES = [
   { name: 'TOP', href: '/shop?category=top' },
@@ -13,19 +15,31 @@ const CATEGORIES = [
   { name: 'LOOKBOOK', href: '/lookbook' },
 ]
 
-const LINKS = [
-  { name: 'LOG IN', href: '/auth/login' },
-  { name: 'CART', href: '#cart' },
-  { name: 'MY PAGE', href: '/mypage' },
-]
-
 type Props = {
   isOpen: boolean
   onClose: () => void
 }
 
 export default function SideMenu({ isOpen, onClose }: Props) {
-  // ESC 키로 닫기
+  const router = useRouter()
+  const [user, setUser] = useState<any>(null)
+
+  useEffect(() => {
+    const supabase = createClient()
+    supabase.auth.getUser().then(({ data }) => setUser(data.user))
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null)
+    })
+    return () => subscription.unsubscribe()
+  }, [])
+
+  const handleLogout = async () => {
+    const supabase = createClient()
+    await supabase.auth.signOut()
+    onClose()
+    router.push('/shop')
+  }
+
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose()
@@ -96,17 +110,37 @@ export default function SideMenu({ isOpen, onClose }: Props) {
 
               {/* Links */}
               <ul className="space-y-6">
-                {LINKS.map((link) => (
-                  <li key={link.name}>
+                {user ? (
+                  <>
+                    <li>
+                      <Link
+                        href="/mypage"
+                        onClick={onClose}
+                        className="text-xs tracking-[1.25px] uppercase font-normal text-sub hover:text-body transition-colors duration-300"
+                      >
+                        MY PAGE
+                      </Link>
+                    </li>
+                    <li>
+                      <button
+                        onClick={handleLogout}
+                        className="text-xs tracking-[1.25px] uppercase font-normal text-sub hover:text-body transition-colors duration-300"
+                      >
+                        LOG OUT
+                      </button>
+                    </li>
+                  </>
+                ) : (
+                  <li>
                     <Link
-                      href={link.href}
+                      href="/auth/login"
                       onClick={onClose}
                       className="text-xs tracking-[1.25px] uppercase font-normal text-sub hover:text-body transition-colors duration-300"
                     >
-                      {link.name}
+                      LOG IN
                     </Link>
                   </li>
-                ))}
+                )}
               </ul>
             </nav>
           </motion.aside>
