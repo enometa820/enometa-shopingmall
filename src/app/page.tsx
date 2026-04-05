@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useRouter } from 'next/navigation'
 import '@fontsource/montserrat/800.css'
@@ -22,6 +23,7 @@ const CARD_IMAGES = [
 export default function IntroPage() {
   const router = useRouter()
   const [entered, setEntered] = useState(false)
+  const [failedImages, setFailedImages] = useState<Set<number>>(new Set())
 
   const handleEnter = () => {
     setEntered(true)
@@ -72,13 +74,17 @@ export default function IntroPage() {
                 style={{ cursor: 'default' }}
               >
                 <div className={`absolute inset-0 bg-gradient-to-br ${card.color} group-hover:scale-[1.03] transition-transform duration-500`} style={{ cursor: 'default' }} />
-                <img
-                  src={card.src}
-                  alt={`Enometa collection ${i + 1}`}
-                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500"
-                  style={{ cursor: 'default' }}
-                  onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
-                />
+                {!failedImages.has(i) && (
+                  <Image
+                    src={card.src}
+                    alt={`Enometa collection ${i + 1}`}
+                    fill
+                    sizes="(max-width: 640px) 60px, (max-width: 768px) 80px, 120px"
+                    className="object-cover group-hover:scale-[1.03] transition-transform duration-500"
+                    style={{ cursor: 'default' }}
+                    onError={() => setFailedImages((prev) => new Set(prev).add(i))}
+                  />
+                )}
               </motion.div>
             ))}
           </div>
