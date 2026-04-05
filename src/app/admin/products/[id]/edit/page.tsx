@@ -16,7 +16,7 @@ export default async function AdminEditProductPage({
 
   return (
     <div>
-      <h1 className="text-sm tracking-[2px] uppercase text-dark mb-8">상�� 수정</h1>
+      <h1 className="text-sm tracking-[2px] uppercase text-dark mb-8">상품 수정</h1>
       <EditProductForm product={product} />
     </div>
   )
