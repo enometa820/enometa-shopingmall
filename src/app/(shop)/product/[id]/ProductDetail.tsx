@@ -22,7 +22,7 @@ export default function ProductDetail({ product }: Props) {
   const canAdd = selectedSize !== null && isSizeInStock(selectedSize)
 
   const handleAddToCart = useCallback(() => {
-    if (!canAdd || !selectedSize) return
+    if (!canAdd || !selectedSize || addedFeedback) return
 
     addItem({
       product_id: product.id,
@@ -36,7 +36,7 @@ export default function ProductDetail({ product }: Props) {
 
     setAddedFeedback(true)
     setTimeout(() => setAddedFeedback(false), 1500)
-  }, [canAdd, selectedSize, selectedColor, product, addItem])
+  }, [canAdd, selectedSize, selectedColor, product, addItem, addedFeedback])
 
   return (
     <>
