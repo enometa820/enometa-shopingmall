@@ -64,12 +64,11 @@
 - [x] 에디토리얼/매거진 페이지 — b컷 이미지 26장 활용, /editorial 라우트
 - [x] 모바일 반응형 폴리싱 — 스와이프 인디케이터 활성화 (IntersectionObserver)
 - [x] 관리자 페이지 접근 — Server Action 보안 강화 + admin 설정 가이드 문서
-- [x] 개발일지 최종 업데이트 — Day 4 작업 내역 추가
+- [x] 개발일지 최종 업데이트
 
-### 중간 우선순위
-- [ ] 커스텀 404 페이지 (브랜드 디자인에 맞게)
-- [ ] Lighthouse 성능 점검 (80점+ 목표, 이미지 최적화)
-
+### 중간 우선순위 — ✅ 전부 완료
+- [x] 커스텀 404 페이지 (브랜드 디자인에 맞게)
+- [x] Lighthouse 성능 점검 (75점 — 이미지 확대 기능 유지를 위해 리사이즈 포기, 인트로 연출 유지)
 
 
 ### 낮은 우선순위 (확장)
@@ -99,7 +98,7 @@
 | Deploy | Vercel |
 | Docs | BMAD Framework |
 
-## 라우트 목록 (22개)
+## 라우트 목록 (23개)
 
 ```
 /                          인트로 (타이핑 + 카드 시퀀스)
@@ -110,6 +109,7 @@
 /checkout/fail             결제 실패
 /order-complete/[id]       주문 완료
 /lookbook                  Lookbook
+/editorial                 에디토리얼 (b컷 이미지)
 /auth/login                로그인
 /auth/signup               회원가입
 /mypage                    마이페이지
