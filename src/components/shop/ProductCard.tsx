@@ -7,9 +7,10 @@ import type { Product } from '@/types/product'
 
 type Props = {
   product: Product
+  priority?: boolean
 }
 
-export default function ProductCard({ product }: Props) {
+export default function ProductCard({ product, priority = false }: Props) {
   const mainImage = product.images[0] || 'https://placehold.co/900x1350/e8e8e8/4a4a4a?text=NO+IMAGE'
   const hoverImage = product.hover_image || product.images[1] || mainImage
 
@@ -28,6 +29,7 @@ export default function ProductCard({ product }: Props) {
           alt={product.name_display}
           fill
           sizes="(max-width: 768px) 50vw, 25vw"
+          priority={priority}
           className="object-cover transition-opacity duration-[400ms] ease-[cubic-bezier(0.165,0.84,0.44,1)] group-hover:opacity-0"
         />
         {/* Hover Image */}
