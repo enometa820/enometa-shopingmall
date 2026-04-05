@@ -44,3 +44,7 @@ next-env.d.ts
 # tools
 .bkit/
 .claude/
+.playwright-mcp/
+_bmad/
+lighthouse-report*.json
+레퍼런스/
