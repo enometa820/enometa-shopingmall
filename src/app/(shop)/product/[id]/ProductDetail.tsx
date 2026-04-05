@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useCallback, useRef, useEffect } from 'react'
+import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useCartStore } from '@/store/cart-store'
 import { formatPrice } from '@/lib/utils/format'
@@ -76,10 +77,13 @@ export default function ProductDetail({ product }: Props) {
                 className="flex-shrink-0 w-full snap-center cursor-zoom-in"
                 onClick={() => setZoomImage(img)}
               >
-                <img
+                <Image
                   src={img}
                   alt={`${product.name_display} ${i + 1}`}
-                  className="w-full object-cover"
+                  width={900}
+                  height={1350}
+                  sizes="100vw"
+                  className="w-full h-auto object-cover"
                 />
               </div>
             ))}
@@ -107,10 +111,13 @@ export default function ProductDetail({ product }: Props) {
                 className="cursor-zoom-in"
                 onClick={() => setZoomImage(img)}
               >
-                <img
+                <Image
                   src={img}
                   alt={`${product.name_display} ${i + 1}`}
-                  className="w-full object-cover"
+                  width={900}
+                  height={1350}
+                  sizes="60vw"
+                  className="w-full h-auto object-cover"
                 />
               </motion.div>
             ))}
@@ -228,9 +235,12 @@ export default function ProductDetail({ product }: Props) {
             className="fixed inset-0 z-[100] bg-white flex items-center justify-center cursor-zoom-out"
             onClick={() => setZoomImage(null)}
           >
-            <img
+            <Image
               src={zoomImage}
               alt={product.name_display}
+              width={1800}
+              height={2700}
+              sizes="100vw"
               className="max-w-full max-h-full object-contain"
             />
             <button

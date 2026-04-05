@@ -1,6 +1,7 @@
 'use client'
 
 import { useRef } from 'react'
+import Image from 'next/image'
 import { motion, useInView } from 'framer-motion'
 import Link from 'next/link'
 
@@ -55,11 +56,13 @@ function FadeInSection({ children, className = '' }: { children: React.ReactNode
 
 function EditorialImage({ src, alt, className = '' }: { src: string; alt: string; className?: string }) {
   return (
-    <div className={`overflow-hidden ${className}`}>
-      <img
+    <div className={`overflow-hidden relative ${className}`}>
+      <Image
         src={src}
         alt={alt}
-        className="w-full h-full object-cover transition-transform duration-700 hover:scale-[1.03]"
+        fill
+        sizes="(max-width: 768px) 100vw, 50vw"
+        className="object-cover transition-transform duration-700 hover:scale-[1.03]"
       />
     </div>
   )
@@ -77,9 +80,13 @@ export default function EditorialPage() {
 
       {/* Hero — Full Width Silhouette */}
       <FadeInSection>
-        <img
+        <Image
           src={editorialImages.hero}
           alt="Enometa Editorial Hero"
+          width={1920}
+          height={1080}
+          sizes="100vw"
+          priority
           className="w-full h-auto"
         />
       </FadeInSection>
@@ -129,9 +136,12 @@ export default function EditorialPage() {
 
       {/* Full Width Mood */}
       <FadeInSection>
-        <img
+        <Image
           src={editorialImages.wide}
           alt="Enometa Editorial Mood"
+          width={1920}
+          height={1080}
+          sizes="100vw"
           className="w-full h-auto"
         />
       </FadeInSection>

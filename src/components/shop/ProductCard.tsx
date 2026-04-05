@@ -23,16 +23,20 @@ export default function ProductCard({ product }: Props) {
       {/* Image Container */}
       <div className="relative aspect-[2/3] overflow-hidden bg-neutral-100 mb-3">
         {/* Main Image */}
-        <img
+        <Image
           src={mainImage}
           alt={product.name_display}
-          className="absolute inset-0 w-full h-full object-cover transition-opacity duration-[400ms] ease-[cubic-bezier(0.165,0.84,0.44,1)] group-hover:opacity-0"
+          fill
+          sizes="(max-width: 768px) 50vw, 25vw"
+          className="object-cover transition-opacity duration-[400ms] ease-[cubic-bezier(0.165,0.84,0.44,1)] group-hover:opacity-0"
         />
         {/* Hover Image */}
-        <img
+        <Image
           src={hoverImage}
           alt={`${product.name_display} detail`}
-          className="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-[400ms] ease-[cubic-bezier(0.165,0.84,0.44,1)] group-hover:opacity-100"
+          fill
+          sizes="(max-width: 768px) 50vw, 25vw"
+          className="object-cover opacity-0 transition-opacity duration-[400ms] ease-[cubic-bezier(0.165,0.84,0.44,1)] group-hover:opacity-100"
         />
 
         {/* Hover Preview — sizes + colors */}

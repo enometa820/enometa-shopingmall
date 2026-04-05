@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
+import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useCartStore } from '@/store/cart-store'
 import { formatPrice } from '@/lib/utils/format'
@@ -86,12 +87,14 @@ export default function CartDrawer({ isOpen, onClose }: Props) {
                       className="flex gap-4"
                     >
                       {/* Thumbnail */}
-                      <div className="w-20 h-24 bg-gray-100 flex-shrink-0 overflow-hidden">
+                      <div className="w-20 h-24 bg-gray-100 flex-shrink-0 overflow-hidden relative">
                         {item.product_image && (
-                          <img
+                          <Image
                             src={item.product_image}
                             alt={item.product_name}
-                            className="w-full h-full object-cover"
+                            fill
+                            sizes="80px"
+                            className="object-cover"
                           />
                         )}
                       </div>
