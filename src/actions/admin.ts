@@ -3,10 +3,21 @@
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 
+// ─── Auth Guard ───
+
+async function requireAdmin() {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user || user.user_metadata?.role !== 'admin') {
+    throw new Error('Unauthorized: admin access required')
+  }
+  return { supabase, user }
+}
+
 // ─── Products ───
 
 export async function adminGetProducts() {
-  const supabase = await createClient()
+  const { supabase } = await requireAdmin()
   const { data, error } = await supabase
     .from('products')
     .select('*')
@@ -17,7 +28,7 @@ export async function adminGetProducts() {
 }
 
 export async function adminDeleteProduct(id: string) {
-  const supabase = await createClient()
+  const { supabase } = await requireAdmin()
   const { error } = await supabase.from('products').delete().eq('id', id)
   if (error) return { error: error.message }
   revalidatePath('/admin/products')
@@ -26,7 +37,7 @@ export async function adminDeleteProduct(id: string) {
 }
 
 export async function adminCreateProduct(formData: FormData) {
-  const supabase = await createClient()
+  const { supabase } = await requireAdmin()
 
   const sizes = formData.get('sizes') as string
   const colors = formData.get('colors') as string
@@ -54,7 +65,7 @@ export async function adminCreateProduct(formData: FormData) {
 }
 
 export async function adminUpdateProduct(id: string, formData: FormData) {
-  const supabase = await createClient()
+  const { supabase } = await requireAdmin()
 
   const sizes = formData.get('sizes') as string
   const colors = formData.get('colors') as string
@@ -84,7 +95,7 @@ export async function adminUpdateProduct(id: string, formData: FormData) {
 // ─── Orders ───
 
 export async function adminGetOrders() {
-  const supabase = await createClient()
+  const { supabase } = await requireAdmin()
   const { data, error } = await supabase
     .from('orders')
     .select('*, order_items(*)')
@@ -95,7 +106,7 @@ export async function adminGetOrders() {
 }
 
 export async function adminUpdateOrderStatus(id: string, status: string) {
-  const supabase = await createClient()
+  const { supabase } = await requireAdmin()
   const { error } = await supabase
     .from('orders')
     .update({ status })
@@ -109,7 +120,7 @@ export async function adminUpdateOrderStatus(id: string, status: string) {
 // ─── Inquiries ───
 
 export async function adminGetInquiries() {
-  const supabase = await createClient()
+  const { supabase } = await requireAdmin()
   const { data, error } = await supabase
     .from('inquiries')
     .select('*')
@@ -120,7 +131,7 @@ export async function adminGetInquiries() {
 }
 
 export async function adminReplyInquiry(id: string, reply: string) {
-  const supabase = await createClient()
+  const { supabase } = await requireAdmin()
   const { error } = await supabase
     .from('inquiries')
     .update({ reply, status: 'replied' })

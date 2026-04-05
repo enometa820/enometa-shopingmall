@@ -13,6 +13,7 @@ const CATEGORIES = [
   { name: 'SHOES', href: '/shop?category=shoes' },
   { name: 'ACC', href: '/shop?category=acc' },
   { name: 'LOOKBOOK', href: '/lookbook' },
+  { name: 'EDITORIAL', href: '/editorial' },
 ]
 
 type Props = {

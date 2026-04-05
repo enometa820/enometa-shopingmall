@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useCartStore } from '@/store/cart-store'
 import { formatPrice } from '@/lib/utils/format'
@@ -15,7 +15,31 @@ export default function ProductDetail({ product }: Props) {
   const [selectedColor, setSelectedColor] = useState<ProductColor>(product.colors[0])
   const [addedFeedback, setAddedFeedback] = useState(false)
   const [zoomImage, setZoomImage] = useState<string | null>(null)
+  const [activeImageIndex, setActiveImageIndex] = useState(0)
+  const scrollContainerRef = useRef<HTMLDivElement>(null)
+  const imageRefs = useRef<(HTMLDivElement | null)[]>([])
   const addItem = useCartStore((s) => s.addItem)
+
+  useEffect(() => {
+    const container = scrollContainerRef.current
+    if (!container) return
+    const refs = imageRefs.current.filter(Boolean) as HTMLDivElement[]
+    if (refs.length === 0) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const index = refs.indexOf(entry.target as HTMLDivElement)
+            if (index !== -1) setActiveImageIndex(index)
+          }
+        })
+      },
+      { root: container, threshold: 0.5 }
+    )
+    refs.forEach((ref) => observer.observe(ref))
+    return () => observer.disconnect()
+  }, [product.images])
 
   const stock = product.stock as Record<string, number>
   const isSizeInStock = (size: string) => (stock[size] ?? 0) > 0
@@ -44,10 +68,11 @@ export default function ProductDetail({ product }: Props) {
         {/* Left — Image Gallery */}
         <div className="lg:w-[60%]">
           {/* Mobile — Horizontal Scroll */}
-          <div className="lg:hidden flex overflow-x-auto snap-x snap-mandatory">
+          <div ref={scrollContainerRef} className="lg:hidden flex overflow-x-auto snap-x snap-mandatory scroll-smooth">
             {product.images.map((img, i) => (
               <div
                 key={i}
+                ref={(el) => { imageRefs.current[i] = el }}
                 className="flex-shrink-0 w-full snap-center cursor-zoom-in"
                 onClick={() => setZoomImage(img)}
               >
@@ -60,9 +85,14 @@ export default function ProductDetail({ product }: Props) {
             ))}
           </div>
           {/* Mobile — Indicator Dots */}
-          <div className="lg:hidden flex justify-center gap-1.5 py-3">
+          <div className="lg:hidden flex justify-center gap-1.5 py-2">
             {product.images.map((_, i) => (
-              <span key={i} className="w-1.5 h-1.5 rounded-full bg-border" />
+              <span
+                key={i}
+                className={`w-1.5 h-1.5 rounded-full transition-colors duration-300 ${
+                  i === activeImageIndex ? 'bg-dark' : 'bg-border'
+                }`}
+              />
             ))}
           </div>
 
