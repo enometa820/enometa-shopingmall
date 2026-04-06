@@ -112,6 +112,29 @@ export async function adminGetOrders(status?: string) {
   return data
 }
 
+export async function adminGetOrder(orderId: string) {
+  const { supabase } = await requireAdmin()
+  const { data, error } = await supabase
+    .from('orders')
+    .select('*, order_items(*)')
+    .eq('id', orderId)
+    .single()
+
+  if (error) return null
+  return data
+}
+
+export async function adminGetOrderStatusHistory(orderId: string) {
+  const { supabase } = await requireAdmin()
+  const { data } = await supabase
+    .from('order_status_history')
+    .select('*')
+    .eq('order_id', orderId)
+    .order('changed_at', { ascending: false })
+
+  return data || []
+}
+
 export async function adminGetOrderCounts() {
   const { supabase } = await requireAdmin()
   const { data, error } = await supabase

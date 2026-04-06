@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { adminGetOrders, adminGetOrderCounts } from '@/actions/admin'
 import { formatPrice, formatDate } from '@/lib/utils/format'
 import { ORDER_STATUS_LABELS, PAYMENT_METHOD_LABELS } from '@/types/order'
@@ -75,7 +76,11 @@ export default async function AdminOrdersPage({
             <tbody>
               {orders.map((order: any) => (
                 <tr key={order.id} className="border-b border-border last:border-0 hover:bg-beige/30 transition-colors">
-                  <td className="text-xs px-4 py-3">{order.order_number}</td>
+                  <td className="text-xs px-4 py-3">
+                    <Link href={`/admin/orders/${order.id}`} className="hover:underline hover:text-dark transition-colors">
+                      {order.order_number}
+                    </Link>
+                  </td>
                   <td className="text-xs px-4 py-3 text-sub">{order.shipping_name}</td>
                   <td className="text-xs px-4 py-3 text-sub">
                     {order.order_items?.[0]?.product_name || '-'}
