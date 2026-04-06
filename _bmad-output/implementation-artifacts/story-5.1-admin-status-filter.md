@@ -20,3 +20,15 @@ So that 특정 상태의 주문만 빠르게 확인할 수 있다.
 - [x] 7종 상태 필터 탭 (전체 포함)
 - [x] 각 탭에 주문 수 표시
 - [x] URL searchParams 기반 서버 사이드 필터링
+
+## Implementation Details
+
+- FILTER_STATUSES 배열: 7종 + 'all' (refund_requested는 필터 미포함)
+- adminGetOrders(status): status가 'all'이면 전체, 아니면 .eq('status', status)
+- adminGetOrderCounts: 전체 orders의 status 컬럼 GROUP BY 카운트
+
+## Test Checklist
+
+- [x] '결제완료' 탭 클릭 → URL ?status=paid → 해당 주문만 표시
+- [x] 각 탭 숫자와 실제 주문 수 일치
+- [x] 전체 탭에서 모든 주문 표시

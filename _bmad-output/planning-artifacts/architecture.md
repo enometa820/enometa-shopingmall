@@ -633,6 +633,17 @@ TOSS_SECRET_KEY=
 **근거**: 다른 페이지 성능에 영향 없음. 체크아웃 진입 시에만 스크립트 로드.
 **구현**: 체크아웃 페이지 `<Script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js" strategy="lazyOnload" />`
 
+### ADR-20: Clerk 전환 폐기 — Supabase Auth 유지
+
+**결정**: Clerk로의 인증 시스템 전환을 폐기하고 Supabase Auth를 계속 사용
+**근거**:
+- RLS(Row Level Security) 전면 재설계 불필요 — 현재 모든 RLS 정책이 `auth.uid()`에 의존
+- 이중 인증 시스템(Clerk JWT + Supabase service_role) 운영 복잡도 회피
+- Supabase Auth에 Google/Kakao OAuth Provider 직접 연동으로 소셜 로그인 충분히 구현 완료
+- 작업량 약 60% 감소 (RLS 마이그레이션, 토큰 동기화, 미들웨어 재작성 불필요)
+**대안 검토**: Clerk는 UI 프리셋과 조직 관리에 장점이 있으나, 현재 프로젝트 규모에서는 Supabase Auth로 충분하며 전환 비용 대비 이점이 없음
+**상태**: 폐기 확정 (2026-04-06)
+
 ---
 
 ## 8. 구현 패턴 & 일관성 규칙

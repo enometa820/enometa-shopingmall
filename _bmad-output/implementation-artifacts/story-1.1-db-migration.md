@@ -23,9 +23,17 @@ So that v2 주문 관리 기능의 데이터 기반을 마련할 수 있다.
 - [x] 기존 v1 주문 데이터 유지 (ALTER TABLE, DROP 아님)
 - [x] RLS 정책 설정
 
-## Implementation Notes
+## Implementation Details
 
-- payment_method DEFAULT 'toss' (v1 호환)
-- status DEFAULT 'paid' 유지 (v1 호환)
-- order_status_history에 order_id 인덱스 포함
-- site_settings에 updated_at 자동 갱신 트리거
+- ALTER TABLE (DROP 아님) — 기존 v1 행 그대로 유지
+- payment_method DEFAULT 'toss', status DEFAULT 'paid' (v1 호환)
+- order_status_history: order_id 인덱스 + changed_at DESC
+- site_settings: updated_at 자동 갱신 트리거 (moddatetime)
+- RLS: orders는 auth.uid() 매칭, site_settings는 public SELECT + admin UPDATE
+
+## Test Checklist
+
+- [x] v1 기존 주문 조회 정상 (컬럼 추가 후에도 NULL 허용)
+- [x] 7종 status CHECK 값 INSERT/UPDATE 정상
+- [x] order_status_history INSERT + order_id FK 정상
+- [x] site_settings upsert 정상

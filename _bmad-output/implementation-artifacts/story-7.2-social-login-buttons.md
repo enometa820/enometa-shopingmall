@@ -23,3 +23,17 @@ So that 이메일/비밀번호 입력 없이 간편하게 접속할 수 있다.
 - [x] 인증 후 /shop으로 리다이렉트
 - [x] 기존 이메일 로그인 유지
 - [x] 회원가입 페이지에도 동일 패턴
+
+## Implementation Details
+
+- signInWithOAuth({ provider, options: { redirectTo, queryParams } })
+- Google: 기본 scope, Kakao: scope override (profile_nickname, profile_image만)
+- redirectTo: `${origin}/auth/callback` → 인증 후 /shop 리다이렉트
+- 구분선 "또는" 텍스트로 이메일 로그인과 시각적 분리
+
+## Test Checklist
+
+- [x] Google 버튼 클릭 → Google 로그인 → /shop 도착
+- [x] Kakao 버튼 클릭 → 카카오 로그인 → /shop 도착
+- [x] 기존 이메일 로그인 정상 작동 확인
+- [x] 회원가입 페이지에서도 동일 동작 확인

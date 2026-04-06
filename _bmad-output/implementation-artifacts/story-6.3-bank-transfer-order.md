@@ -22,3 +22,15 @@ So that 어디로 얼마를 입금해야 하는지 알 수 있다.
 - [x] 주문 완료 페이지에서 계좌 안내 표시 (은행, 계좌, 예금주, 금액, 주문번호)
 - [x] 계좌 정보는 site_settings에서 조회
 - [x] "입금 확인까지 대기" 안내 메시지
+
+## Implementation Details
+
+- createOrder에 paymentMethod 분기: bank_transfer → status='pending_payment', payment_method='bank_transfer'
+- order-complete: payment_method==='bank_transfer'이면 계좌 안내 섹션 렌더
+- 계좌 정보: getSetting('bank_name'), getSetting('bank_account'), getSetting('bank_holder')
+
+## Test Checklist
+
+- [x] 계좌이체 주문 생성 → DB status=pending_payment 확인
+- [x] 주문 완료 페이지에서 은행/계좌/예금주/금액 표시
+- [x] 계좌 미설정 시에도 에러 없이 기본 안내 표시

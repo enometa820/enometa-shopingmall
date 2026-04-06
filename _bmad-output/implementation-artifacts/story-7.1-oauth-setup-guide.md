@@ -20,3 +20,15 @@ So that 소셜 로그인 기반을 마련할 수 있다.
 - [x] Kakao OAuth 설정 단계별 가이드
 - [x] Supabase Provider 설정 방법
 - [x] Redirect URL 설정 안내
+
+## Implementation Details
+
+- Google: GCP Console → OAuth 2.0 Client → Authorized redirect URI 설정
+- Kakao: Developers Console → 앱 생성 → 카카오 로그인 활성화 → Redirect URI
+- Supabase: Auth > Providers에서 각 Provider 활성화 + Client ID/Secret 입력
+- Redirect URL: `https://<project>.supabase.co/auth/v1/callback`
+
+## Test Checklist
+
+- [x] 가이드 단계별 스크린샷/링크 정확성 확인
+- [x] Redirect URL 패턴이 실제 Supabase 설정과 일치
