@@ -87,7 +87,13 @@ export default async function AdminOrdersPage({
                   </td>
                   <td className="text-xs px-4 py-3">
                     <div className="flex items-center gap-2">
-                      <OrderStatusSelect orderId={order.id} currentStatus={order.status} />
+                      {order.status === 'cancelled' || order.status === 'refund_requested' ? (
+                        <span className="text-xs text-red-500">
+                          {ORDER_STATUS_LABELS[order.status as OrderStatus]}
+                        </span>
+                      ) : (
+                        <OrderStatusSelect orderId={order.id} currentStatus={order.status} />
+                      )}
                       {order.status === 'pending_payment' && (
                         <ConfirmPaymentButton orderId={order.id} />
                       )}
