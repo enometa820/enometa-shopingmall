@@ -4,8 +4,8 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { formatPrice, formatDate } from '@/lib/utils/format'
-import { ORDER_STATUS_LABELS } from '@/types/order'
-import type { OrderStatus } from '@/types/order'
+import { ORDER_STATUS_LABELS, COURIER_COMPANIES } from '@/types/order'
+import type { OrderStatus, CourierCompany } from '@/types/order'
 import { cancelOrder } from '@/actions/order-status'
 
 type OrderCardProps = {
@@ -15,6 +15,8 @@ type OrderCardProps = {
     status: string
     total: number
     created_at: string
+    tracking_number?: string | null
+    courier_company?: string | null
     order_items?: { product_name: string }[]
   }
 }
@@ -67,6 +69,12 @@ export default function OrderCard({ order }: OrderCardProps) {
           <p className="text-xs text-sub mt-2">
             {order.order_items[0].product_name}
             {order.order_items.length > 1 && ` 외 ${order.order_items.length - 1}건`}
+          </p>
+        )}
+        {order.tracking_number && order.courier_company && (
+          <p className="text-xs text-sub mt-1.5">
+            {COURIER_COMPANIES[order.courier_company as CourierCompany]?.name || order.courier_company}{' '}
+            <span className="text-dark">{order.tracking_number}</span>
           </p>
         )}
       </Link>
