@@ -9,8 +9,8 @@ completedAt: '2026-04-06'
 
 # Architecture Document — Enometa Shopping Mall
 
-**Date:** 2026-04-04
-**Version:** 1.0
+**Date:** 2026-04-06
+**Version:** 2.0
 
 ---
 
@@ -71,7 +71,11 @@ enometa-shopingmall/
 │   │   │   │   ├── new/page.tsx      # 상품 등록
 │   │   │   │   └── [id]/
 │   │   │   │       └── edit/page.tsx # 상품 수정
-│   │   │   ├── orders/page.tsx       # 주문 관리
+│   │   │   ├── orders/
+│   │   │   │   ├── page.tsx          # 주문 관리 (상태 필터 탭)
+│   │   │   │   ├── OrderStatusSelect.tsx  # 상태 변경 셀렉트
+│   │   │   │   └── ConfirmPaymentButton.tsx # 입금 확인 버튼
+│   │   │   ├── settings/page.tsx     # 사이트 설정 (계좌 정보)
 │   │   │   └── inquiries/page.tsx    # 문의 관리
 │   │   │
 │   │   └── policy/
@@ -104,9 +108,15 @@ enometa-shopingmall/
 │   │   │   └── CartSummary.tsx       # 합계 + 결제 버튼
 │   │   │
 │   │   ├── checkout/
+│   │   │   ├── AddressSearch.tsx     # 카카오 우편번호 검색
+│   │   │   ├── PaymentMethodSelect.tsx # 카드결제/계좌이체 전환
 │   │   │   ├── ShippingForm.tsx      # 배송 정보 폼
 │   │   │   ├── OrderSummary.tsx      # 주문 요약
 │   │   │   └── TossPayment.tsx       # 토스페이먼츠 위젯
+│   │   │
+│   │   ├── order/
+│   │   │   ├── OrderStatusTimeline.tsx # 주문 상태 이력 타임라인
+│   │   │   └── TrackingInfo.tsx       # 배송 추적 정보
 │   │   │
 │   │   ├── inquiry/
 │   │   │   ├── FloatingButton.tsx    # 플로팅 문의 버튼
@@ -117,7 +127,8 @@ enometa-shopingmall/
 │   │   │   ├── StatsCard.tsx         # 통계 카드
 │   │   │   ├── DataTable.tsx         # Notion 스타일 테이블
 │   │   │   ├── ImageUploader.tsx     # 이미지 업로드 (드래그&드롭)
-│   │   │   └── StatusBadge.tsx       # 상태 뱃지
+│   │   │   ├── StatusBadge.tsx       # 상태 뱃지
+│   │   │   └── TrackingModal.tsx     # 송장 입력 모달 (택배사+송장번호)
 │   │   │
 │   │   └── ui/
 │   │       ├── Button.tsx
@@ -156,6 +167,9 @@ enometa-shopingmall/
 │   └── actions/
 │       ├── products.ts              # 상품 Server Actions
 │       ├── orders.ts                # 주문 Server Actions
+│       ├── order-status.ts          # 주문 상태 변경 + 이력 기록 (v2)
+│       ├── settings.ts              # 사이트 설정 조회 (v2)
+│       ├── admin.ts                 # 관리자 전용 Actions (v2)
 │       ├── cart.ts                  # 장바구니 Server Actions
 │       └── inquiries.ts            # 문의 Server Actions
 │
@@ -207,13 +221,19 @@ CREATE TABLE orders (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   order_number TEXT UNIQUE NOT NULL,     -- 'ENO-20260405-001' 형식
   user_id UUID REFERENCES auth.users(id),
-  status TEXT NOT NULL DEFAULT 'paid',   -- 'paid'|'preparing'|'shipping'|'delivered'
+  status TEXT NOT NULL DEFAULT 'pending_payment',
+    -- 'pending_payment'|'paid'|'preparing'|'shipping'|'delivered'|'cancelled'|'refund_requested'
   total INTEGER NOT NULL,                -- 합계 금액
   shipping_name TEXT NOT NULL,
   shipping_phone TEXT NOT NULL,
   shipping_address TEXT NOT NULL,
   shipping_detail TEXT,
   shipping_memo TEXT,
+  postal_code TEXT,                       -- 우편번호 (v2)
+  payment_method TEXT NOT NULL DEFAULT 'toss',  -- 'toss'|'bank_transfer' (v2)
+  bank_transfer_info JSONB,              -- 계좌이체 정보 (v2)
+  tracking_number TEXT,                   -- 송장번호 (v2)
+  courier_company TEXT,                   -- 택배사 코드 (v2)
   payment_key TEXT,                       -- 토스페이먼츠 paymentKey
   created_at TIMESTAMPTZ DEFAULT now(),
   updated_at TIMESTAMPTZ DEFAULT now()
@@ -265,7 +285,31 @@ CREATE TABLE inquiries (
 );
 ```
 
-### 3.6 RLS (Row Level Security) 정책
+### 3.6 order_status_history (v2)
+
+```sql
+CREATE TABLE order_status_history (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  order_id UUID NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
+  from_status TEXT NOT NULL,
+  to_status TEXT NOT NULL,
+  changed_by UUID REFERENCES auth.users(id),
+  changed_at TIMESTAMPTZ DEFAULT now()
+);
+```
+
+### 3.7 site_settings (v2)
+
+```sql
+CREATE TABLE site_settings (
+  key TEXT PRIMARY KEY,
+  value JSONB NOT NULL,
+  updated_at TIMESTAMPTZ DEFAULT now()
+);
+-- 용도: 계좌이체 계좌 정보 등 사이트 전역 설정
+```
+
+### 3.8 RLS (Row Level Security) 정책
 
 ```sql
 -- products: 누구나 읽기 가능, admin만 쓰기

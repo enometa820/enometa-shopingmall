@@ -100,13 +100,14 @@
 - [x] OAuth 설정 가이드 문서 (docs/oauth-setup-guide.md)
 - [x] DB 마이그레이션 SQL (supabase/migrations/20260406_v2_orders_upgrade.sql)
 
-### 미적용 (코드 외 작업)
+### 코드 외 작업
 - [ ] Supabase에 v2 마이그레이션 SQL 실행
-- [ ] Google OAuth Provider 설정
-- [ ] Kakao OAuth Provider 설정
+- [x] Google OAuth Provider 설정 (Supabase에서 활성화 완료)
+- [x] Kakao OAuth Provider 설정 (로그인 활성화 + 동의항목 + scope 수정)
 - [ ] 관리자 설정에서 계좌 정보 입력
-- [ ] Vercel 재배포
-- [ ] 풀플로우 테스트 (주문→취소→배송추적, 계좌이체, 소셜 로그인)
+- [x] Vercel 재배포 (2026-04-06)
+- [x] 풀플로우 테스트 완료 (Playwright 자동화 — 12개 항목)
+- [x] pending_payment 취소 버그 수정
 
 ---
 
