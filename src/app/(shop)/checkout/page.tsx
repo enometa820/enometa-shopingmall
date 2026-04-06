@@ -5,6 +5,9 @@ import { useRouter } from 'next/navigation'
 import { useCartStore } from '@/store/cart-store'
 import { createOrder } from '@/actions/orders'
 import { formatPrice } from '@/lib/utils/format'
+import AddressSearch from '@/components/checkout/AddressSearch'
+import PaymentMethodSelect from '@/components/checkout/PaymentMethodSelect'
+import type { PaymentMethod } from '@/types/order'
 import Script from 'next/script'
 
 declare global {
@@ -22,10 +25,12 @@ export default function CheckoutPage() {
   const [form, setForm] = useState({
     name: '',
     phone: '',
+    postalCode: '',
     address: '',
     detail: '',
     memo: '',
   })
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('toss')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [widgetReady, setWidgetReady] = useState(false)
@@ -58,6 +63,31 @@ export default function CheckoutPage() {
     setError('')
     setLoading(true)
 
+    // 계좌이체 결제
+    if (paymentMethod === 'bank_transfer') {
+      const result = await createOrder({
+        items,
+        total,
+        shippingName: form.name,
+        shippingPhone: form.phone,
+        postalCode: form.postalCode,
+        shippingAddress: form.address,
+        shippingDetail: form.detail,
+        shippingMemo: form.memo,
+        paymentMethod: 'bank_transfer',
+      })
+
+      if (result.error) {
+        setError(result.error)
+        setLoading(false)
+        return
+      }
+
+      clearCart()
+      router.push(`/order-complete/${result.orderId}`)
+      return
+    }
+
     const orderId = `ENO_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`
 
     // 토스페이먼츠가 설정되어 있으면 결제 위젯 사용
@@ -70,7 +100,7 @@ export default function CheckoutPage() {
             : `${items[0].product_name} 외 ${items.length - 1}건`,
           customerName: form.name,
           customerMobilePhone: form.phone.replace(/-/g, ''),
-          successUrl: `${window.location.origin}/checkout/success?shippingName=${encodeURIComponent(form.name)}&shippingPhone=${encodeURIComponent(form.phone)}&shippingAddress=${encodeURIComponent(form.address)}&shippingDetail=${encodeURIComponent(form.detail)}&shippingMemo=${encodeURIComponent(form.memo)}`,
+          successUrl: `${window.location.origin}/checkout/success?shippingName=${encodeURIComponent(form.name)}&shippingPhone=${encodeURIComponent(form.phone)}&shippingPostalCode=${encodeURIComponent(form.postalCode)}&shippingAddress=${encodeURIComponent(form.address)}&shippingDetail=${encodeURIComponent(form.detail)}&shippingMemo=${encodeURIComponent(form.memo)}`,
           failUrl: `${window.location.origin}/checkout/fail`,
         })
       } catch (err: any) {
@@ -90,6 +120,7 @@ export default function CheckoutPage() {
       total,
       shippingName: form.name,
       shippingPhone: form.phone,
+      postalCode: form.postalCode,
       shippingAddress: form.address,
       shippingDetail: form.detail,
       shippingMemo: form.memo,
@@ -154,19 +185,18 @@ export default function CheckoutPage() {
               required
               className="w-full text-xs py-3 border-b border-border outline-none focus:border-dark transition-colors placeholder:text-muted"
             />
-            <input
-              name="address"
-              value={form.address}
-              onChange={handleChange}
-              placeholder="주소"
-              required
-              className="w-full text-xs py-3 border-b border-border outline-none focus:border-dark transition-colors placeholder:text-muted"
+            <AddressSearch
+              onChange={({ postalCode, address }) =>
+                setForm((prev) => ({ ...prev, postalCode, address }))
+              }
+              defaultPostalCode={form.postalCode}
+              defaultAddress={form.address}
             />
             <input
               name="detail"
               value={form.detail}
               onChange={handleChange}
-              placeholder="상세 주소"
+              placeholder="상세 주소 (동/호수)"
               className="w-full text-xs py-3 border-b border-border outline-none focus:border-dark transition-colors placeholder:text-muted"
             />
             <input
@@ -177,9 +207,12 @@ export default function CheckoutPage() {
               className="w-full text-xs py-3 border-b border-border outline-none focus:border-dark transition-colors placeholder:text-muted"
             />
 
+            {/* 결제 방법 선택 */}
+            <PaymentMethodSelect value={paymentMethod} onChange={setPaymentMethod} />
+
             {/* 토스페이먼츠 위젯 */}
-            {clientKey && (
-              <div className="pt-6 space-y-4">
+            {clientKey && paymentMethod === 'toss' && (
+              <div className="pt-4 space-y-4">
                 <p className="text-xs uppercase tracking-[1.25px] text-sub">결제 수단</p>
                 <div id="payment-method" />
                 <div id="agreement" />
@@ -194,7 +227,12 @@ export default function CheckoutPage() {
                 disabled={loading}
                 className="w-full py-3.5 bg-dark text-white text-xs uppercase tracking-[1.5px] hover:bg-accent transition-colors duration-300 disabled:opacity-50"
               >
-                {loading ? '처리 중...' : `${formatPrice(total)} 주문하기${clientKey ? '' : ' (데모)'}`}
+                {loading
+                  ? '처리 중...'
+                  : paymentMethod === 'bank_transfer'
+                    ? `${formatPrice(total)} 주문하기`
+                    : `${formatPrice(total)} 주문하기${clientKey ? '' : ' (데모)'}`
+                }
               </button>
             </div>
           </form>

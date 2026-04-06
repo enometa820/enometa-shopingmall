@@ -7,6 +7,7 @@ const NAV_ITEMS = [
   { label: '📦 상품 관리', href: '/admin/products' },
   { label: '🛒 주문 관리', href: '/admin/orders' },
   { label: '💬 문의 관리', href: '/admin/inquiries' },
+  { label: '⚙️ 설정', href: '/admin/settings' },
 ]
 
 export default async function AdminLayout({

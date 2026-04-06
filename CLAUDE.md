@@ -20,6 +20,12 @@
 - admin 전용 함수는 `requireAdmin()` 헬퍼로 시작
 - 패턴: `const { supabase } = await requireAdmin()`
 
+## 주문 상태 관리 (v2)
+- 주문 상태 변경은 반드시 `updateOrderStatus()` 헬퍼 사용 (`src/actions/order-status.ts`)
+- 직접 orders.status UPDATE 금지 — 이력 누락 방지
+- 7종 상태: pending_payment, paid, preparing, shipping, delivered, cancelled, refund_requested
+- 금지 전환: delivered→cancelled, cancelled→*, shipping→cancelled(사용자)
+
 ## 컴포넌트 패턴
 - 스크롤 애니메이션: `FadeInSection` (useInView + framer-motion)
 - 이미지 호버: `overflow-hidden` + `hover:scale-[1.03] transition-transform duration-700`

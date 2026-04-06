@@ -10,11 +10,12 @@ export default async function AdminDashboard() {
   const today = new Date()
   today.setHours(0, 0, 0, 0)
 
-  const [ordersRes, productsRes, inquiriesRes, recentOrdersRes] = await Promise.all([
+  const [ordersRes, productsRes, inquiriesRes, recentOrdersRes, pendingPaymentRes] = await Promise.all([
     supabase.from('orders').select('total, created_at'),
     supabase.from('products').select('id', { count: 'exact', head: true }),
     supabase.from('inquiries').select('id', { count: 'exact', head: true }),
     supabase.from('orders').select('*, order_items(product_name)').order('created_at', { ascending: false }).limit(5),
+    supabase.from('orders').select('id', { count: 'exact', head: true }).eq('status', 'pending_payment'),
   ])
 
   const orders = ordersRes.data || []
@@ -22,10 +23,12 @@ export default async function AdminDashboard() {
   const todayRevenue = todayOrders.reduce((sum, o) => sum + o.total, 0)
   const totalOrders = orders.length
   const recentOrders = recentOrdersRes.data || []
+  const pendingPaymentCount = pendingPaymentRes.count || 0
 
   const stats = [
     { label: '오늘 매출', value: formatPrice(todayRevenue) },
     { label: '총 주문', value: `${totalOrders}건` },
+    { label: '입금대기', value: `${pendingPaymentCount}건`, highlight: pendingPaymentCount > 0 },
     { label: '등록 상품', value: `${productsRes.count || 0}개` },
     { label: '문의', value: `${inquiriesRes.count || 0}건` },
   ]
@@ -35,11 +38,18 @@ export default async function AdminDashboard() {
       <h1 className="text-sm tracking-[2px] uppercase text-dark mb-8">Dashboard</h1>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-10">
         {stats.map((stat) => (
-          <div key={stat.label} className="border border-border p-5">
+          <div
+            key={stat.label}
+            className={`border p-5 ${
+              stat.highlight
+                ? 'border-orange-300 bg-orange-50/50'
+                : 'border-border'
+            }`}
+          >
             <p className="text-[10px] uppercase tracking-[1.5px] text-sub mb-2">{stat.label}</p>
-            <p className="text-lg font-light text-dark">{stat.value}</p>
+            <p className={`text-lg font-light ${stat.highlight ? 'text-orange-600' : 'text-dark'}`}>{stat.value}</p>
           </div>
         ))}
       </div>

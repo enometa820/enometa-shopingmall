@@ -2,6 +2,8 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
+import { updateOrderStatus } from './order-status'
+import type { OrderStatus } from '@/types/order'
 
 // ─── Auth Guard ───
 
@@ -94,26 +96,102 @@ export async function adminUpdateProduct(id: string, formData: FormData) {
 
 // ─── Orders ───
 
-export async function adminGetOrders() {
+export async function adminGetOrders(status?: string) {
   const { supabase } = await requireAdmin()
-  const { data, error } = await supabase
+  let query = supabase
     .from('orders')
     .select('*, order_items(*)')
-    .order('created_at', { ascending: false })
+
+  if (status && status !== 'all') {
+    query = query.eq('status', status)
+  }
+
+  const { data, error } = await query.order('created_at', { ascending: false })
 
   if (error) return []
   return data
 }
 
-export async function adminUpdateOrderStatus(id: string, status: string) {
+export async function adminGetOrderCounts() {
   const { supabase } = await requireAdmin()
+  const { data, error } = await supabase
+    .from('orders')
+    .select('status')
+
+  if (error) return {}
+
+  const counts: Record<string, number> = { all: data.length }
+  for (const order of data) {
+    counts[order.status] = (counts[order.status] || 0) + 1
+  }
+  return counts
+}
+
+export async function adminUpdateOrderStatus(id: string, status: string) {
+  const { supabase, user } = await requireAdmin()
+
+  const result = await updateOrderStatus({
+    orderId: id,
+    newStatus: status as OrderStatus,
+    changedBy: user.id,
+  })
+
+  if (result.error) return { error: result.error }
+  return { success: true }
+}
+
+export async function adminUpdateShipping(
+  orderId: string,
+  trackingNumber: string,
+  courierCompany: string,
+) {
+  const { supabase, user } = await requireAdmin()
+
+  // Save tracking info
   const { error } = await supabase
     .from('orders')
-    .update({ status })
-    .eq('id', id)
+    .update({
+      tracking_number: trackingNumber,
+      courier_company: courierCompany,
+    })
+    .eq('id', orderId)
 
   if (error) return { error: error.message }
-  revalidatePath('/admin/orders')
+
+  // Change status to shipping
+  const result = await updateOrderStatus({
+    orderId,
+    newStatus: 'shipping',
+    changedBy: user.id,
+    note: `송장번호: ${trackingNumber}`,
+  })
+
+  if (result.error) return { error: result.error }
+  return { success: true }
+}
+
+// ─── Site Settings ───
+
+export async function adminGetSetting(key: string) {
+  const { supabase } = await requireAdmin()
+  const { data, error } = await supabase
+    .from('site_settings')
+    .select('*')
+    .eq('key', key)
+    .single()
+
+  if (error) return null
+  return data as { key: string; value: Record<string, unknown>; updated_at: string }
+}
+
+export async function adminUpdateSetting(key: string, value: Record<string, unknown>) {
+  const { supabase } = await requireAdmin()
+  const { error } = await supabase
+    .from('site_settings')
+    .upsert({ key, value, updated_at: new Date().toISOString() }, { onConflict: 'key' })
+
+  if (error) return { error: error.message }
+  revalidatePath('/admin/settings')
   return { success: true }
 }
 

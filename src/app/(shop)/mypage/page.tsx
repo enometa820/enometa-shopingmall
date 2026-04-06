@@ -1,10 +1,8 @@
 import Link from 'next/link'
 import { getOrders } from '@/actions/orders'
-import { formatPrice, formatDate } from '@/lib/utils/format'
-import { ORDER_STATUS_LABELS } from '@/types/order'
-import type { OrderStatus } from '@/types/order'
 import { createClient } from '@/lib/supabase/server'
 import LogoutButton from './LogoutButton'
+import OrderCard from './OrderCard'
 
 export default async function MyPage() {
   const supabase = await createClient()
@@ -34,28 +32,7 @@ export default async function MyPage() {
       ) : (
         <div className="space-y-4">
           {orders.map((order: any) => (
-            <Link
-              key={order.id}
-              href={`/order-complete/${order.id}`}
-              className="block border border-border p-5 hover:border-dark transition-colors duration-300"
-            >
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-xs tracking-wide">{order.order_number}</span>
-                <span className="text-[10px] px-2 py-0.5 bg-beige text-body">
-                  {ORDER_STATUS_LABELS[order.status as OrderStatus]}
-                </span>
-              </div>
-              <div className="flex items-center justify-between text-xs text-sub">
-                <span>{formatDate(order.created_at)}</span>
-                <span>{formatPrice(order.total)}</span>
-              </div>
-              {order.order_items && order.order_items.length > 0 && (
-                <p className="text-xs text-sub mt-2">
-                  {order.order_items[0].product_name}
-                  {order.order_items.length > 1 && ` 외 ${order.order_items.length - 1}건`}
-                </p>
-              )}
-            </Link>
+            <OrderCard key={order.id} order={order} />
           ))}
         </div>
       )}

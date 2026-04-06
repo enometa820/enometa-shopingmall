@@ -3,16 +3,19 @@
 import { createClient } from '@/lib/supabase/server'
 import { formatOrderNumber } from '@/lib/utils/format'
 import type { CartItem } from '@/types/cart'
+import type { PaymentMethod } from '@/types/order'
 
 type CreateOrderInput = {
   items: CartItem[]
   total: number
   shippingName: string
   shippingPhone: string
+  postalCode?: string
   shippingAddress: string
   shippingDetail?: string
   shippingMemo?: string
   paymentKey?: string
+  paymentMethod?: PaymentMethod
 }
 
 export async function createOrder(input: CreateOrderInput) {
@@ -42,6 +45,7 @@ export async function createOrder(input: CreateOrderInput) {
   }
 
   const orderNumber = formatOrderNumber()
+  const isBankTransfer = input.paymentMethod === 'bank_transfer'
 
   // 주문 생성
   const { data: order, error: orderError } = await supabase
@@ -49,14 +53,16 @@ export async function createOrder(input: CreateOrderInput) {
     .insert({
       order_number: orderNumber,
       user_id: user.id,
-      status: 'paid',
+      status: isBankTransfer ? 'pending_payment' : 'paid',
       total: input.total,
       shipping_name: input.shippingName,
       shipping_phone: input.shippingPhone,
+      postal_code: input.postalCode || null,
       shipping_address: input.shippingAddress,
       shipping_detail: input.shippingDetail || null,
       shipping_memo: input.shippingMemo || null,
       payment_key: input.paymentKey || null,
+      payment_method: input.paymentMethod || 'toss',
     })
     .select()
     .single()

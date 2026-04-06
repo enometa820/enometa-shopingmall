@@ -45,6 +45,7 @@ function SuccessContent() {
         total: getTotal(),
         shippingName: searchParams.get('shippingName') ?? '',
         shippingPhone: searchParams.get('shippingPhone') ?? '',
+        postalCode: searchParams.get('shippingPostalCode') ?? '',
         shippingAddress: searchParams.get('shippingAddress') ?? '',
         shippingDetail: searchParams.get('shippingDetail') ?? '',
         shippingMemo: searchParams.get('shippingMemo') ?? '',

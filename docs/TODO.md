@@ -1,6 +1,6 @@
 # Enometa Shopping Mall — TODO
 
-> 최종 업데이트: 2026-04-05
+> 최종 업데이트: 2026-04-06
 
 ---
 
@@ -82,6 +82,34 @@
 
 ---
 
+## v2 기능 확장 (2026-04-06)
+
+### 구현 완료 — 빌드 통과, DB 마이그레이션 + OAuth 설정 미적용
+- [x] 주문 상태 7종 확장 (pending_payment, cancelled, refund_requested 추가)
+- [x] 주문 상태 변경 이력 추적 (order_status_history 테이블 + updateOrderStatus 헬퍼)
+- [x] 카카오 우편번호 검색 (Daum Postcode API + AddressSearch 컴포넌트)
+- [x] 사용자 주문 취소 (마이페이지에서 paid/preparing 상태 취소)
+- [x] 배송 추적 (관리자 송장번호 입력 → 사용자 택배사 추적 링크)
+- [x] 주문 상태 이력 타임라인 UI (마이페이지 주문 상세)
+- [x] 관리자 주문 상태별 필터링 (7종 탭)
+- [x] 관리자 결제 확인 버튼 (입금대기 주문)
+- [x] 관리자 결제수단 뱃지 (카드/계좌이체)
+- [x] 계좌이체 결제 (결제수단 선택 + 주문 생성 + 계좌 안내 페이지)
+- [x] 사이트 설정 페이지 (관리자 계좌 정보 관리)
+- [x] 소셜 로그인 버튼 (Google, Kakao — Supabase OAuth)
+- [x] OAuth 설정 가이드 문서 (docs/oauth-setup-guide.md)
+- [x] DB 마이그레이션 SQL (supabase/migrations/20260406_v2_orders_upgrade.sql)
+
+### 미적용 (코드 외 작업)
+- [ ] Supabase에 v2 마이그레이션 SQL 실행
+- [ ] Google OAuth Provider 설정
+- [ ] Kakao OAuth Provider 설정
+- [ ] 관리자 설정에서 계좌 정보 입력
+- [ ] Vercel 재배포
+- [ ] 풀플로우 테스트 (주문→취소→배송추적, 계좌이체, 소셜 로그인)
+
+---
+
 ## 기술 스택 요약
 
 | 영역 | 선택 |
@@ -91,13 +119,14 @@
 | Styling | TailwindCSS 4 |
 | Animation | Framer Motion |
 | Backend | Supabase (PostgreSQL + Auth + RLS) |
-| Payment | 토스페이먼츠 (Widget SDK v1, 테스트 모드) |
+| Payment | 토스페이먼츠 (Widget SDK v1, 테스트 모드) + 계좌이체 |
+| Auth | Supabase Auth (이메일 + Google/Kakao OAuth) |
 | State | Zustand + localStorage / Supabase |
 | Image | Midjourney v7 (AI 생성) |
 | Deploy | Vercel |
 | Docs | BMAD Framework |
 
-## 라우트 목록 (23개)
+## 라우트 목록 (24개)
 
 ```
 /                          인트로 (타이핑 + 카드 시퀀스)
@@ -118,6 +147,7 @@
 /admin/products/[id]/edit  상품 수정 (비주얼 폼)
 /admin/orders              주문 관리
 /admin/inquiries           문의 관리
+/admin/settings            사이트 설정 (계좌 정보)
 /policy/privacy            개인정보처리방침
 /policy/terms              이용약관
 /api/payments/confirm      결제 확인 API
