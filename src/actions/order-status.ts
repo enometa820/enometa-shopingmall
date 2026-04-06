@@ -107,8 +107,8 @@ export async function cancelOrder(orderId: string) {
     return { error: '주문을 찾을 수 없습니다.' }
   }
 
-  // Only allow cancellation from paid or preparing
-  if (order.status !== 'paid' && order.status !== 'preparing') {
+  // Only allow cancellation from pending_payment, paid or preparing
+  if (order.status !== 'pending_payment' && order.status !== 'paid' && order.status !== 'preparing') {
     return { error: '현재 상태에서는 취소할 수 없습니다.' }
   }
 
