@@ -101,10 +101,10 @@
 - [x] DB 마이그레이션 SQL (supabase/migrations/20260406_v2_orders_upgrade.sql)
 
 ### 코드 외 작업
-- [ ] Supabase에 v2 마이그레이션 SQL 실행
+- [x] Supabase에 v2 마이그레이션 SQL 실행 (이전 세션에서 완료)
 - [x] Google OAuth Provider 설정 (Supabase에서 활성화 완료)
 - [x] Kakao OAuth Provider 설정 (로그인 활성화 + 동의항목 + scope 수정)
-- [ ] 관리자 설정에서 계좌 정보 입력
+- [x] 관리자 설정에서 계좌 정보 입력 (국민은행 40240104367511)
 - [x] Vercel 재배포 (2026-04-06)
 - [x] 풀플로우 테스트 완료 (Playwright 자동화 — 12개 항목)
 - [x] pending_payment 취소 버그 수정
