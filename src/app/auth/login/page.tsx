@@ -112,6 +112,9 @@ function SocialLoginButtons({ redirect }: { redirect: string }) {
       provider,
       options: {
         redirectTo: window.location.origin + redirect,
+        ...(provider === 'kakao' && {
+          queryParams: { scope: 'profile_nickname profile_image' },
+        }),
       },
     })
   }

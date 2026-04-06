@@ -137,6 +137,9 @@ function SocialLoginButtons() {
       provider,
       options: {
         redirectTo: window.location.origin + '/shop',
+        ...(provider === 'kakao' && {
+          queryParams: { scope: 'profile_nickname profile_image' },
+        }),
       },
     })
   }

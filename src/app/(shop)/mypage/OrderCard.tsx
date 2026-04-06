@@ -19,7 +19,7 @@ type OrderCardProps = {
   }
 }
 
-const CANCELLABLE_STATUSES: OrderStatus[] = ['paid', 'preparing']
+const CANCELLABLE_STATUSES: OrderStatus[] = ['pending_payment', 'paid', 'preparing']
 
 export default function OrderCard({ order }: OrderCardProps) {
   const router = useRouter()
