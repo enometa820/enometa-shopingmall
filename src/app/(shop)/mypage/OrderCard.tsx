@@ -66,16 +66,29 @@ export default function OrderCard({ order }: OrderCardProps) {
           <span>{formatPrice(order.total)}</span>
         </div>
         {order.order_items && order.order_items.length > 0 && (
-          <p className="text-xs text-sub mt-2">
-            {order.order_items[0].product_name}
-            {order.order_items.length > 1 && ` 외 ${order.order_items.length - 1}건`}
-          </p>
-        )}
-        {order.tracking_number && order.courier_company && (
-          <p className="text-xs text-sub mt-1.5">
-            {COURIER_COMPANIES[order.courier_company as CourierCompany]?.name || order.courier_company}{' '}
-            <span className="text-dark">{order.tracking_number}</span>
-          </p>
+          <div className="flex items-center justify-between mt-2">
+            <p className="text-xs text-sub">
+              {order.order_items[0].product_name}
+              {order.order_items.length > 1 && ` 외 ${order.order_items.length - 1}건`}
+            </p>
+            {order.tracking_number && order.courier_company && (
+              <div className="flex items-center gap-2 shrink-0">
+                <span className="text-[10px] text-sub">
+                  {COURIER_COMPANIES[order.courier_company as CourierCompany]?.name}{' '}
+                  {order.tracking_number}
+                </span>
+                <a
+                  href={COURIER_COMPANIES[order.courier_company as CourierCompany]?.trackingUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  className="text-[10px] px-2 py-0.5 border border-dark text-dark hover:bg-dark hover:text-white transition-colors duration-300"
+                >
+                  배송추적
+                </a>
+              </div>
+            )}
+          </div>
         )}
       </Link>
 
