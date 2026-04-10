@@ -2,6 +2,12 @@
 
 # Enometa Shopping Mall — Project Rules
 
+## 현재 상태
+- **라이브 URL**: https://enometa-shopingmall.vercel.app
+- **배포**: Vercel (수동 `npx vercel --prod`)
+- **상태**: 배포 완료, 운영 중
+- **enometa.dev 연동**: 포트폴리오 섹션에서 "포트폴리오 보기" 링크로 연결됨
+
 ## Tech Stack
 - Next.js 16 (App Router) + TypeScript + TailwindCSS 4 + Framer Motion
 - Supabase (PostgreSQL + Auth + RLS)
