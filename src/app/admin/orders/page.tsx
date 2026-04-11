@@ -60,56 +60,94 @@ export default async function AdminOrdersPage({
       {orders.length === 0 ? (
         <p className="text-xs text-muted py-8">주문이 없습니다.</p>
       ) : (
-        <div className="border border-border">
-          <table className="w-full">
-            <thead>
-              <tr className="border-b border-border bg-beige/50">
-                <th className="text-[10px] uppercase tracking-wide text-sub font-normal text-left px-4 py-3">주문번호</th>
-                <th className="text-[10px] uppercase tracking-wide text-sub font-normal text-left px-4 py-3">고객</th>
-                <th className="text-[10px] uppercase tracking-wide text-sub font-normal text-left px-4 py-3">상품</th>
-                <th className="text-[10px] uppercase tracking-wide text-sub font-normal text-left px-4 py-3">금액</th>
-                <th className="text-[10px] uppercase tracking-wide text-sub font-normal text-left px-4 py-3">결제</th>
-                <th className="text-[10px] uppercase tracking-wide text-sub font-normal text-left px-4 py-3">상태</th>
-                <th className="text-[10px] uppercase tracking-wide text-sub font-normal text-left px-4 py-3">일시</th>
-              </tr>
-            </thead>
-            <tbody>
-              {orders.map((order: any) => (
-                <tr key={order.id} className="border-b border-border last:border-0 hover:bg-beige/30 transition-colors">
-                  <td className="text-xs px-4 py-3">
-                    <Link href={`/admin/orders/${order.id}`} className="hover:underline hover:text-dark transition-colors">
-                      {order.order_number}
-                    </Link>
-                  </td>
-                  <td className="text-xs px-4 py-3 text-sub">{order.shipping_name}</td>
-                  <td className="text-xs px-4 py-3 text-sub">
-                    {order.order_items?.[0]?.product_name || '-'}
-                    {order.order_items?.length > 1 && ` 외 ${order.order_items.length - 1}건`}
-                  </td>
-                  <td className="text-xs px-4 py-3">{formatPrice(order.total)}</td>
-                  <td className="text-xs px-4 py-3">
-                    <PaymentBadge method={order.payment_method} />
-                  </td>
-                  <td className="text-xs px-4 py-3">
-                    <div className="flex items-center gap-2">
-                      {order.status === 'cancelled' || order.status === 'refund_requested' ? (
-                        <span className="text-xs text-red-500">
-                          {ORDER_STATUS_LABELS[order.status as OrderStatus]}
-                        </span>
-                      ) : (
-                        <OrderStatusSelect orderId={order.id} currentStatus={order.status} />
-                      )}
-                      {order.status === 'pending_payment' && (
-                        <ConfirmPaymentButton orderId={order.id} />
-                      )}
-                    </div>
-                  </td>
-                  <td className="text-xs px-4 py-3 text-sub">{formatDate(order.created_at)}</td>
+        <>
+          {/* 데스크톱: 테이블 */}
+          <div className="border border-border hidden md:block">
+            <table className="w-full">
+              <thead>
+                <tr className="border-b border-border bg-beige/50">
+                  <th className="text-[10px] uppercase tracking-wide text-sub font-normal text-left px-4 py-3">주문번호</th>
+                  <th className="text-[10px] uppercase tracking-wide text-sub font-normal text-left px-4 py-3">고객</th>
+                  <th className="text-[10px] uppercase tracking-wide text-sub font-normal text-left px-4 py-3">상품</th>
+                  <th className="text-[10px] uppercase tracking-wide text-sub font-normal text-left px-4 py-3">금액</th>
+                  <th className="text-[10px] uppercase tracking-wide text-sub font-normal text-left px-4 py-3">결제</th>
+                  <th className="text-[10px] uppercase tracking-wide text-sub font-normal text-left px-4 py-3">상태</th>
+                  <th className="text-[10px] uppercase tracking-wide text-sub font-normal text-left px-4 py-3">일시</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {orders.map((order: any) => (
+                  <tr key={order.id} className="border-b border-border last:border-0 hover:bg-beige/30 transition-colors">
+                    <td className="text-xs px-4 py-3">
+                      <Link href={`/admin/orders/${order.id}`} className="hover:underline hover:text-dark transition-colors">
+                        {order.order_number}
+                      </Link>
+                    </td>
+                    <td className="text-xs px-4 py-3 text-sub">{order.shipping_name}</td>
+                    <td className="text-xs px-4 py-3 text-sub">
+                      {order.order_items?.[0]?.product_name || '-'}
+                      {order.order_items?.length > 1 && ` 외 ${order.order_items.length - 1}건`}
+                    </td>
+                    <td className="text-xs px-4 py-3">{formatPrice(order.total)}</td>
+                    <td className="text-xs px-4 py-3">
+                      <PaymentBadge method={order.payment_method} />
+                    </td>
+                    <td className="text-xs px-4 py-3">
+                      <div className="flex items-center gap-2">
+                        {order.status === 'cancelled' || order.status === 'refund_requested' ? (
+                          <span className="text-xs text-red-500">
+                            {ORDER_STATUS_LABELS[order.status as OrderStatus]}
+                          </span>
+                        ) : (
+                          <OrderStatusSelect orderId={order.id} currentStatus={order.status} />
+                        )}
+                        {order.status === 'pending_payment' && (
+                          <ConfirmPaymentButton orderId={order.id} />
+                        )}
+                      </div>
+                    </td>
+                    <td className="text-xs px-4 py-3 text-sub">{formatDate(order.created_at)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* 모바일: 카드 */}
+          <div className="flex flex-col gap-3 md:hidden">
+            {orders.map((order: any) => (
+              <Link
+                key={order.id}
+                href={`/admin/orders/${order.id}`}
+                className="block border border-border p-4 hover:bg-beige/30 transition-colors"
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs font-medium text-dark">{order.order_number}</span>
+                  <div className="flex items-center gap-2">
+                    <PaymentBadge method={order.payment_method} />
+                    {order.status === 'cancelled' || order.status === 'refund_requested' ? (
+                      <span className="text-[10px] px-2 py-0.5 bg-red-50 text-red-500">
+                        {ORDER_STATUS_LABELS[order.status as OrderStatus]}
+                      </span>
+                    ) : (
+                      <span className="text-[10px] px-2 py-0.5 bg-beige">
+                        {ORDER_STATUS_LABELS[order.status as OrderStatus]}
+                      </span>
+                    )}
+                  </div>
+                </div>
+                <p className="text-xs text-sub mb-1">
+                  {order.shipping_name} · {order.order_items?.[0]?.product_name || '-'}
+                  {order.order_items?.length > 1 && ` 외 ${order.order_items.length - 1}건`}
+                </p>
+                <div className="flex items-center justify-between mt-2">
+                  <span className="text-xs font-medium">{formatPrice(order.total)}</span>
+                  <span className="text-[10px] text-muted">{formatDate(order.created_at)}</span>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </>
       )}
     </div>
   )

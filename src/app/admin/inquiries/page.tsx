@@ -16,16 +16,16 @@ export default async function AdminInquiriesPage() {
       ) : (
         <div className="space-y-4">
           {inquiries.map((inq: any) => (
-            <div key={inq.id} className="border border-border p-5">
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center gap-3">
+            <div key={inq.id} className="border border-border p-4 md:p-5">
+              <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between mb-3">
+                <div className="flex flex-wrap items-center gap-2 md:gap-3">
                   <span className="text-xs font-normal">{inq.name}</span>
-                  <span className="text-[10px] text-sub">{inq.email}</span>
+                  <span className="text-[10px] text-sub hidden md:inline">{inq.email}</span>
                   <span className="text-[10px] px-2 py-0.5 bg-beige">
                     {INQUIRY_CATEGORY_LABELS[inq.category as InquiryCategory]}
                   </span>
                 </div>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2 md:gap-3">
                   <span className={`text-[10px] px-2 py-0.5 ${inq.status === 'replied' ? 'bg-green-50 text-green-600' : 'bg-beige text-sub'}`}>
                     {inq.status === 'replied' ? '답변완료' : '대기중'}
                   </span>

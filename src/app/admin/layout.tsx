@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
+import MobileNav from '@/components/admin/MobileNav'
 
 const NAV_ITEMS = [
   { label: '📊 대시보드', href: '/admin/dashboard' },
@@ -23,8 +24,11 @@ export default async function AdminLayout({
   }
 
   return (
-    <div className="min-h-screen flex bg-white">
-      {/* Sidebar */}
+    <div className="min-h-screen flex flex-col md:flex-row bg-white">
+      {/* Mobile Nav */}
+      <MobileNav email={user.email || ''} />
+
+      {/* Desktop Sidebar */}
       <aside className="w-[220px] border-r border-border flex-shrink-0 hidden md:flex flex-col">
         <div className="h-[var(--header-height)] flex items-center px-5 border-b border-border">
           <Link href="/admin/dashboard" className="text-xs tracking-[2px] uppercase text-dark">
@@ -52,7 +56,7 @@ export default async function AdminLayout({
 
       {/* Main Content */}
       <main className="flex-1 overflow-auto">
-        <div className="p-6 md:p-8 max-w-[1200px]">
+        <div className="p-4 md:p-8 max-w-[1200px]">
           {children}
         </div>
       </main>
