@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { formatPrice, formatDate } from '@/lib/utils/format'
 import { ORDER_STATUS_LABELS } from '@/types/order'
 import type { OrderStatus } from '@/types/order'
+import DemoGuide from '@/components/admin/DemoGuide'
 
 export default async function AdminDashboard() {
   const supabase = await createClient()
@@ -9,6 +10,9 @@ export default async function AdminDashboard() {
   // 통계 데이터 조회
   const today = new Date()
   today.setHours(0, 0, 0, 0)
+
+  const { data: { user } } = await supabase.auth.getUser()
+  const isDemoUser = user?.email === 'demo-admin@enometa.dev'
 
   const [ordersRes, productsRes, inquiriesRes, recentOrdersRes, pendingPaymentRes] = await Promise.all([
     supabase.from('orders').select('total, created_at'),
@@ -36,6 +40,8 @@ export default async function AdminDashboard() {
   return (
     <div>
       <h1 className="text-sm tracking-[2px] uppercase text-dark mb-8">Dashboard</h1>
+
+      {isDemoUser && <DemoGuide />}
 
       {/* Stats Cards */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-10">

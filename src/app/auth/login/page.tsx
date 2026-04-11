@@ -89,6 +89,15 @@ function LoginForm() {
         {/* 소셜 로그인 */}
         <SocialLoginButtons redirect={redirect} />
 
+        {/* 데모 관리자 */}
+        <div className="mt-8 flex items-center gap-4">
+          <div className="flex-1 border-t border-border" />
+          <span className="text-xs text-muted">체험</span>
+          <div className="flex-1 border-t border-border" />
+        </div>
+
+        <DemoLoginButton />
+
         <div className="mt-8 text-center">
           <Link
             href="/auth/signup"
@@ -159,6 +168,40 @@ function SocialLoginButtons({ redirect }: { redirect: string }) {
         </svg>
         카카오로 로그인
       </button>
+    </div>
+  )
+}
+
+function DemoLoginButton() {
+  const router = useRouter()
+  const [loading, setLoading] = useState(false)
+
+  const handleDemoLogin = async () => {
+    setLoading(true)
+    const { demoAdminLogin } = await import('@/actions/demo')
+    const result = await demoAdminLogin()
+
+    if (result.success) {
+      router.push('/admin/dashboard')
+      router.refresh()
+    } else {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <div className="mt-4">
+      <button
+        type="button"
+        onClick={handleDemoLogin}
+        disabled={loading}
+        className="w-full py-3 flex items-center justify-center gap-2 text-xs tracking-[1px] text-white bg-[#111] hover:bg-[#333] transition-colors duration-300 disabled:opacity-50"
+      >
+        {loading ? '접속 중...' : '데모 관리자로 체험하기'}
+      </button>
+      <p className="text-[10px] text-muted text-center mt-2">
+        포트폴리오 체험용 — 어드민 대시보드를 직접 만져보세요
+      </p>
     </div>
   )
 }
