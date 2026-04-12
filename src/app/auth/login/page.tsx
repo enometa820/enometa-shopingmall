@@ -174,10 +174,10 @@ function SocialLoginButtons({ redirect }: { redirect: string }) {
 
 function DemoLoginButton() {
   const router = useRouter()
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState<'admin' | 'customer' | null>(null)
 
-  const handleDemoLogin = async () => {
-    setLoading(true)
+  const handleDemoAdmin = async () => {
+    setLoading('admin')
     const { demoAdminLogin } = await import('@/actions/demo')
     const result = await demoAdminLogin()
 
@@ -185,22 +185,43 @@ function DemoLoginButton() {
       router.push('/admin/dashboard')
       router.refresh()
     } else {
-      setLoading(false)
+      setLoading(null)
+    }
+  }
+
+  const handleDemoCustomer = async () => {
+    setLoading('customer')
+    const { demoCustomerLogin } = await import('@/actions/demo')
+    const result = await demoCustomerLogin()
+
+    if (result.success) {
+      router.push('/mypage')
+      router.refresh()
+    } else {
+      setLoading(null)
     }
   }
 
   return (
-    <div className="mt-4">
+    <div className="mt-4 space-y-3">
       <button
         type="button"
-        onClick={handleDemoLogin}
-        disabled={loading}
+        onClick={handleDemoCustomer}
+        disabled={loading !== null}
         className="w-full py-3 flex items-center justify-center gap-2 text-xs tracking-[1px] text-white bg-[#111] hover:bg-[#333] transition-colors duration-300 disabled:opacity-50"
       >
-        {loading ? '접속 중...' : '데모 관리자로 체험하기'}
+        {loading === 'customer' ? '접속 중...' : '데모 고객으로 체험하기'}
       </button>
-      <p className="text-[10px] text-muted text-center mt-2">
-        포트폴리오 체험용 — 어드민 대시보드를 직접 만져보세요
+      <button
+        type="button"
+        onClick={handleDemoAdmin}
+        disabled={loading !== null}
+        className="w-full py-3 flex items-center justify-center gap-2 text-xs tracking-[1px] text-[#111] border border-[#ddd] bg-white hover:bg-gray-50 transition-colors duration-300 disabled:opacity-50"
+      >
+        {loading === 'admin' ? '접속 중...' : '데모 관리자로 체험하기'}
+      </button>
+      <p className="text-[10px] text-muted text-center">
+        포트폴리오 체험용 — 주문 내역과 어드민을 직접 만져보세요
       </p>
     </div>
   )
