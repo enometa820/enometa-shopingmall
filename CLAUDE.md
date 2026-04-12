@@ -11,7 +11,7 @@
 ## Tech Stack
 - Next.js 16 (App Router) + TypeScript + TailwindCSS 4 + Framer Motion
 - Supabase (PostgreSQL + Auth + RLS)
-- 토스페이먼츠 (Widget SDK v1, 테스트 모드)
+- 토스페이먼츠 (REST API 직접 호출, 테스트 모드)
 - Vercel 배포
 
 ## 이미지
