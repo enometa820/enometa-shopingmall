@@ -4,9 +4,20 @@
 
 ## 현재 상태
 - **라이브 URL**: https://enometa-shopingmall.vercel.app
-- **배포**: Vercel (수동 `npx vercel --prod`)
+- **배포**: `git push origin main` → Vercel 자동 배포
 - **상태**: 배포 완료, 운영 중
 - **enometa.dev 연동**: 포트폴리오 섹션에서 "포트폴리오 보기" 링크로 연결됨
+- **Hub 연동**: `C:\Users\sickkiya\Projects\enometa-hub\status.yaml`에 상태 추적
+
+## 데모 계정
+| 역할 | 이메일 | 비밀번호 |
+|------|--------|---------|
+| 관리자 | admin@enometa.dev | admin1234 |
+| 고객 | customer@enometa.dev | customer1234 |
+
+## 크로스 프로젝트 의존관계
+- 이 프로젝트 변경 시 → enometa.dev 포트폴리오 썸네일/설명 갱신 가능성
+- 배포 후 → Hub `status.yaml` last_deploy 갱신 필요
 
 ## Tech Stack
 - Next.js 16 (App Router) + TypeScript + TailwindCSS 4 + Framer Motion
