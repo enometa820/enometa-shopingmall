@@ -8,6 +8,15 @@ const nextConfig: NextConfig = {
       { protocol: 'https', hostname: 'qqkyeexyarpttsmvtzom.supabase.co' },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: '/products',
+        destination: '/shop',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;
