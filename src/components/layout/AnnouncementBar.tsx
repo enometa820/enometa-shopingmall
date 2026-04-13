@@ -4,7 +4,10 @@ import { useState } from 'react'
 import Link from 'next/link'
 
 export default function AnnouncementBar() {
-  const [visible, setVisible] = useState(true)
+  const [visible, setVisible] = useState(() => {
+    if (typeof window === 'undefined') return true
+    return sessionStorage.getItem('hide-announcement') !== '1'
+  })
 
   if (!visible) return null
 
@@ -18,7 +21,7 @@ export default function AnnouncementBar() {
           </Link>
         </p>
         <button
-          onClick={() => setVisible(false)}
+          onClick={() => { setVisible(false); sessionStorage.setItem('hide-announcement', '1') }}
           className="absolute right-3 text-sub hover:text-body text-xs transition-colors"
         >
           ✕

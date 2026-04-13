@@ -65,7 +65,7 @@ export default function ShopContent({ initialProducts }: Props) {
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search products..."
+          placeholder="상품 검색..."
           className="w-full border-b border-border bg-transparent py-2 text-xs tracking-wide text-body placeholder:text-muted focus:border-dark focus:outline-none transition-colors duration-300"
         />
       </div>
