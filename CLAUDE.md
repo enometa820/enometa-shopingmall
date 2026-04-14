@@ -7,7 +7,7 @@
 - **배포**: `git push origin main` → Vercel 자동 배포
 - **상태**: 배포 완료, 운영 중
 - **enometa.dev 연동**: 포트폴리오 섹션에서 "포트폴리오 보기" 링크로 연결됨
-- **Hub 연동**: `C:\Users\sickkiya\Projects\enometa-hub\status.yaml`에 상태 추적
+- **Hub 연동**: `C:\Users\sickkiya\Projects\enometa-hub` — status.yaml 상태 추적 + BRAND.md 톤앤매너 기준
 
 ## 데모 계정
 | 역할 | 이메일 | 비밀번호 |
